@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Run command on all nodes
+
+# TODO: Expand $NODE in all arguments
+
+# eg: ./run-all -sudo -P ls /home/$NODE
+
+# -P: Parallel execution
+
+USER=""
+if [ "$1" == "-sudo" ]; then
+    USER="root@";
+    shift
+fi
+
+if [ "$1" == "-P" ]; then
+
+    printf "Parallel Mode!\n\n"
+
+    cut -f2 ./hosts | xargs -P 0 -I{} ssh -qt $USER{} $*;
+    # ./hosts-list | cut -f2 | xargs -P 0 -I{} sh -c "echo {}; ssh -qt $USER{} $*;";
+
+    # CMD=$1; shift;
+    # echo parallel -S $(./hosts-list | cut -f2 | tr "\n" "," | head -c -1) $CMD ::: $*
+
+else
+
+    for NODE in $(cut -f2 ./hosts); do
+# TODO: Colorize this name?
+        echo $NODE;
+        ssh -qt $USER$NODE $*;
+        printf "\n";
+    done
+
+fi
