@@ -38,7 +38,7 @@ and then type
 
 This command will run all the queries listed in example.sql at once.  
 
-\item[3.]The format of the file should be as follows. You can have a preamble where you may create views if you like (please note that no procedures are allowed (this has to be pure sql), and correspondingly have a cleanup section where these views are removed. One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL
+\item[3.] The format of the file should be as follows. You can have a preamble where you may create views if you like (please note that no procedures are allowed (this has to be pure sql), and correspondingly have a cleanup section where these views are removed. One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL
 query. Leave a blank line after each query. 
 
 - -PREAMBLE- -
@@ -67,11 +67,11 @@ CLEANUP EVERYTHING YOU CREATED HERE
 
 \item[6.] Assume set semantics, unless stated otherwise.
 
-\item[7.] No changes are allowed in the i) data, ii) \textcolor{red}{loading process}, iii) attribute names, iv) table names
+\item[7.] No changes are allowed in the i) data, ii) attribute names, iii) table names
 
-\item[8.] The .pdf file should contain a bar graph corresponding to the dataset. The graphs should report the timings for each query of the dataset (X-axis legend is the query number, Y-axis legend is the time taken).
+\item[8.] The .pdf file should contain a bar graph corresponding to the dataset. The graph should report the timings for each query of the dataset (X-axis legend is the query number, Y-axis legend is the time taken).
 
-\item[9.] \textbf{TODO} Moodle instructions
+\item[9.] The submission will be done on Moodle. Details regarding submission and auto evaluation will be updated on piazza.
 \end{itemize}
 \section{Dataset}
 
@@ -79,27 +79,28 @@ CLEANUP EVERYTHING YOU CREATED HERE
 
 \begin{itemize}
 
-\item[1.] \textcolor{red}{In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from  \url{www.cse.iitd.ac.in/~cs5090257/unified.txt}. You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. The cleaned up data only contains the information about the publications that are of type articles. }
+\item[1.] In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from  \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. The zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
 
-\item[2.] Your database should include following five tables and you should use only these tables while writing solution of the queries. You can create temporary tables while handling any SQL query but you should include SQL queries for creating and deleting these temporary tables.
+copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
+
+\item[2.] \textcolor{red}{The database will include following five tables and you should use only these tables while writing solution of the queries. You can create temporary tables while handling any SQL query but you should include SQL queries for creating and deleting these temporary tables. Note - you don't have to define these tables in the submission file, these will already be present will evaluation.}
 
 \begin{enumerate}
 \item Paper\\
 	\textbf{Attributes :}  a) PaperId: Int, b) Title: text, c) year: Int, d) VenueId: Int
 \item Author\\
-	\textbf{Attributes :} a) AuthorId: Int, b) name: String
+	\textbf{Attributes :} a) AuthorId: Int, b) name: text
 	
 \item PaperByAuthors\\
 	\textbf{Attributes :} a) AuthorId: Int, b) PaperId: Int
 	
 \item Citation\\
 	\textbf{Attributes :} a) Paper1Id: Int, b) Paper2Id: Int\\
-\emph{Note :} Paper2Id is paperId of the cited paper and it is cited by Paper1Id, i.e. Paper1Id cites Paper2Id. There are few entries in the dataset which cites paper that are not available into the dataset. So you have to ignore those entries.
+\emph{Note :} Paper2Id is paperId of the cited paper and it is cited by Paper1Id, i.e. Paper1Id cites Paper2Id.
 
 \item Venue\\
-	\textbf{Attributes :} a) VenueId: Int, b) name: varchar(50), c) type: varchar(50)\\
-\emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like conference/journal etc. 
-\textcolor{red}{You will be able to extract these information from key associated with each paper in the dataset.}
+	\textbf{Attributes :} a) VenueId: Int, b) name: text, c) type: text\\
+\emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like 'journals' etc. 
 \end{enumerate}
 
 \end{itemize}
@@ -108,7 +109,7 @@ CLEANUP EVERYTHING YOU CREATED HERE
 
 \begin{enumerate}
 \item
-[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (conference, 20000), (journal, 30000), ... 
+[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (journals, 30000), ... 
 \item
 [2.] What is the average number of authors per paper? Output column: the aggregate value.
 \item
@@ -132,11 +133,11 @@ CLEANUP EVERYTHING YOU CREATED HERE
 \item
 [12.] Two major journals are 'ieicet' and 'tcs' . Find all authors who published at least 10 'ieicet' papers but never published a 'tcs' paper order by alphabetically.
 \item
-[13.] Compute the total number of publications per year in DBLP during 2004-2013. Output Column: (Year, No. of Publication).
+[13.] Compute the total number of publications per year during 2004-2013. Output Column: (Year, No. of Publication).
 \item
-[14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) \textcolor{red}{order by alphabetically}? Output column: count. 
+[14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) ? Output column: count. 
 \item
-[15.] Write an SQL query that lists the titles of the most cited papers order by decreasing number of citation. \textcolor{red}{Tie breaking?}
+[15.] Write an SQL query that lists the titles of the most cited papers order by decreasing number of citation (break ties using alphabetic order).
 \item
 [16.] Write an SQL query that  list the titles of all publications that have been cited more than 10 times order by alphabetically.  
 \item
@@ -148,9 +149,9 @@ CLEANUP EVERYTHING YOU CREATED HERE
 \item
 [20.] Who are the authors who published in any 'corr' journal between 2009 and 2013 but not in 'ieicet' 2009 journal? Output column: author.name order by alphabetically.
 \item 
-[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically. You cannot list the years from 2009 to 2013 individually in the query. You can only use 2009 and 2013 as constants, but not anything in between. (Hint: You may create a temporary table, but make sure to drop it after the query. \textcolor{red}{Points will be deducted if the temporary table is not dropped.})
+[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically. You cannot list the years from 2009 to 2013 individually in the query. You can only use 2009 and 2013 as constants, but not anything in between. (Hint: You may create a temporary table, but make sure to drop it after the query.)
 \item 
-[22.] What is(are) the journal/year(s) (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year. 
+[22.] What is the journal/year (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year.
 
 \end{enumerate}
 \end{document}
