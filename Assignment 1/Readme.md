@@ -52,20 +52,39 @@
 
     * Setting up 3rd server
 
-    * Setting up roles and database
+    * Setting up roles and database, on `vpl1`
 
         ```sql
-        CREATE ROLE vpl_user LOGIN;
-        CREATE DATABASE vpl_db OWNER postgres;
+        DROP DATABASE vpl_db;
+        DROP ROLE vpl_user;
+
+        CREATE ROLE vpl_user WITH LOGIN;
+        CREATE DATABASE vpl_db;
+
+        -- Connect to vpl_db
+        -- CREATE SCHEMA vpl_schema;
+
+        -- Connect to vpl_db
+        -- CREATE TABLES
+        \c vpl_db
+        \i meta/schema.sql
+
+        REVOKE ALL ON SCHEMA public FROM vpl_user;
+        REVOKE ALL ON DATABASE vpl_db FROM vpl_user;
+
+        GRANT CONNECT ON DATABASE vpl_db TO vpl_user;
+        GRANT SELECT ON Paper, Author, PaperByAuthors, Citation, Venue TO vpl_user;
+
         ```
 
 ## Assignment 1 with VPL
 
     - Run Deepak's script on dataset to create tables
     - Create test dataset
-        + Load it on both servers
+        + Load it on all servers
 
     - What is the "correct" script format?
+
     - Answers of SQL queries?
         + Are the queries correct?
         + Ambiguities?
@@ -75,6 +94,19 @@
     - What if psql throws an error?
 
     - Grade in background but don't show
+
+    - Problems
+        - We want to give `CREATE VIEW` permission
+        - Name clashes of views in single Database
+        - Resource usage of old views
+
+    - Solution
+        - Create new database for every evaluation?
+            - `WITH TEMPLATE`
+            - Resource usage, Timing? - Depends on test dataset
+        - Instead of creating a new database, create a schema?
+            - So that all new views are created inside it
+            - and we can later drop the schema easily
 
 
 ```bash
