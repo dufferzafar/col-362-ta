@@ -26,7 +26,7 @@ if [ "$1" == "-P" ]; then
 
 else
 
-    for NODE in $(cut -f2 ./hosts); do
+    for NODE in $(cut -f1 ./hosts); do
 # TODO: Colorize this name?
         echo $NODE;
         ssh -qt $USER$NODE $*;
