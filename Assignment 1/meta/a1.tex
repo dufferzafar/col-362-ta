@@ -24,11 +24,12 @@
 
 \item[1.]You will submit 2 files: Fname1Lname1-Fname2Lname2.sql and Fname1Lname1-Fname2Lname2.pdf, corresponding to the dataset and a timings report, respectively.
 
-\item[2.]The .sql files are run automatically using the psql command using the \textbackslash i option, so please ensure that there are no syntax errors in the file. {\it If we are unable to run your file, you get an automatic reduction to 0 marks.}
+\item[2.]Use PostgreSQL 11 for your homework. See \url{https://www.postgresql.org/download/} for instructions
+on how to download and install it on your OS. The .sql files are run automatically using the psql command using the \textbackslash i option, so please ensure that there are no syntax errors in the file. {\it If we are unable to run your file, you get an automatic reduction to 0 marks.}
 
 
 To understand how to run many queries at once from text file, a dummy query file example.sql is available in 
-\url{www.cse.iitd.ac.in/~cs5090257/example.sql}. To run example.sql in postgres, type the following command in the terminal:
+\url{www.cse.iitd.ac.in/~mcs172071/example.sql}. To run example.sql in postgres, type the following command in the terminal:
 
 sudo -u postgres psql dbname
 
@@ -61,7 +62,7 @@ SQL QUERY
 
 CLEANUP EVERYTHING YOU CREATED HERE
 
-\item[4.] Many of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
+\item[4.] All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
 
 \item[5.] Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded. 
 
@@ -85,21 +86,43 @@ copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
 
 \item[2.] The database will include following five tables and you should use only these tables while writing solution of the queries. You can create temporary tables while handling any SQL query but you should include SQL queries for creating and deleting these temporary tables. Note - you don't have to define these tables in the submission file, these will already be present will evaluation.
 
+
 \begin{enumerate}
 \item Paper\\
-	\textbf{Attributes :}  a) PaperId: Int, b) Title: text, c) year: Int, d) VenueId: Int
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+             PaperId : int & Title : text & year : int & VenueId : int\\
+            \hline
+        \end{tabular}
 \item Author\\
-	\textbf{Attributes :} a) AuthorId: Int, b) name: text
-	
+        \begin{tabular}{|c|c|}
+            \hline 
+             AuthorId : int & name : text \\
+            \hline
+        \end{tabular}
+
 \item PaperByAuthors\\
-	\textbf{Attributes :} a) AuthorId: Int, b) PaperId: Int
-	
+        \begin{tabular}{|c|c|}
+            \hline 
+             AuthorId : int & PaperId : int \\
+            \hline
+        \end{tabular}
 \item Citation\\
-	\textbf{Attributes :} a) Paper1Id: Int, b) Paper2Id: Int\\
+        \begin{tabular}{|c|c|}
+            \hline 
+             Paper1Id : int & Paper2Id : int \\
+            \hline
+        \end{tabular}
+
 \emph{Note :} Paper2Id is paperId of the cited paper and it is cited by Paper1Id, i.e. Paper1Id cites Paper2Id.
 
 \item Venue\\
-	\textbf{Attributes :} a) VenueId: Int, b) name: text, c) type: text\\
+        \begin{tabular}{|c|c|c|}
+            \hline 
+             VenueId : int & name : text & type : text\\
+            \hline
+        \end{tabular}
+
 \emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like 'journals' etc. 
 \end{enumerate}
 
@@ -109,49 +132,56 @@ copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
 
 \begin{enumerate}
 \item
-[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (journals, 30000), ... 
+[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (journals, 30000), ... Order the output columns in decreasing order of counts and break ties using publication-type alphabetically. 
 \item
-[2.] What is the average number of authors per paper? Output column: the aggregate value.
+[2.] What is the average number of authors per paper? Output column: the aggregate value. 
 \item
-[3.] List the titles of all entities with more than 20 authors order by alphabetically. 
+[3.] List the titles of all entities with more than 20 authors order by alphabetically. Output column : paper.Title.
 \item
-[4.] List the names of all authors who never published as a single author order by alphabetically.
+[4.] List the names of all authors who never published as a single author order by alphabetically. Output column : author.name.
 \item
-[5.] Find the top 20 authors with the largest number of publications order by first rank and on tie, order by alphabetically.
+[5.] Find the top 20 authors with the largest number of publications order by first rank and on tie, order by alphabetically. Output column : author.name.
 \item
-[6.] List the names of all authors who published as a single author more than 100 times order by alphabetically.
+[6.] List the names of all authors who published as a single author more than 50 times order by alphabetically. Output column : author.name.
 \item
-[7.] List the names of authors who have never published a paper in a journal order by alphabetically.
+[7.] List the names of authors who have never published a paper in a journal order by alphabetically. Output column : author.name.
 \item
-[8.] List the names of authors who have \textbf{only} journal publications order by alphabetically.
+[8.] List the names of authors who have \textbf{only} journal publications order by alphabetically. Output column : author.name.
 \item
-[9.] List the names of the authors who have published at least two papers in 2012 \textbf{and} at least three papers in 2013 order by alphabetically.
+[9.] List the names of the authors who have published at least two papers in 2012 \textbf{and} at least three papers in 2013 order by alphabetically. Output column : author.name.
 \item
-[10.] Find the top 20 authors with the largest number of publications in 'corr' journal order by rank.
+[10.] Find the top 20 authors with the largest number of publications in 'corr' journal order by rank and break ties using alphabetic order. Output column : author.name.
 \item
-[11.] Name the authors that have four papers or more in 'amc' journal order by alphabetically.
+[11.] Name the authors that have four papers or more in 'amc' journal order by alphabetically. Output column : author.name.
 \item
-[12.] Two major journals are 'ieicet' and 'tcs' . Find all authors who published at least 10 'ieicet' papers but never published a 'tcs' paper order by alphabetically.
+[12.] Two major journals are 'ieicet' and 'tcs' . Find all authors who published at least 10 'ieicet' papers but never published a 'tcs' paper order by alphabetically. Output column : author.name.
 \item
 [13.] Compute the total number of publications per year during 2004-2013. Output Column: (Year, No. of Publication).
 \item
 [14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) ? Output column: count. 
 \item
-[15.] Write an SQL query that lists the titles of the most cited papers order by decreasing number of citation (break ties using alphabetic order).
+[15.] Write an SQL query that lists the titles of the most cited papers order by decreasing number of citation (break ties using alphabetic order). Output column : paper.Title.
 \item
-[16.] Write an SQL query that  list the titles of all publications that have been cited more than 10 times order by alphabetically.  
+[16.] Write an SQL query that  list the titles of all publications that have been cited more than 10 times order by alphabetically. Output column : paper.Title. 
 \item
-[17.] Write an SQL query that list the titles of all publications that are cited more than they cite by a margin of at least 10 order by alphabetically. 
+[17.] Write an SQL query that list the titles of all publications that are cited more than they cite by a margin of at least 10 order by alphabetically. Output column : paper.Title.
 \item
-[18.] Write an SQL query that list the titles of papers that have never been cited order by alphabetically.
+[18.] Write an SQL query that list the titles of papers that have never been cited order by alphabetically. Output column : paper.Title.
 \item
-[19.] Write an SQL query that list the names of all authors who have published papers citing other papers by themselves order by alphabetically. 
+[19.] Write an SQL query that list the names of all authors who have published papers citing other papers by themselves order by alphabetically. Output column : author.name. 
 \item
 [20.] Who are the authors who published in any 'corr' journal between 2009 and 2013 but not in 'ieicet' 2009 journal? Output column: author.name order by alphabetically.
 \item 
-[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically. You cannot list the years from 2009 to 2013 individually in the query. You can only use 2009 and 2013 as constants, but not anything in between. (Hint: You may create a temporary table, but make sure to drop it after the query.)
-\item 
-[22.] What is the journal/year (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year.
+[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically. 
+\item  
+[22.] What is (are) the journal/year(s) (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year. If there are multiple answers, return all ordered by year(increasing) and break ties using journal.name alphabetically.
+\item
+[23.] List the author that have maximum publications in each journal, sorted alphabetically by journal name. Output columns : journal.name,author.name .  
+\item
+[24.] Calculate the journal impact factor (\url{https://en.wikipedia.org/wiki/Impact_factor}) for each journal for year 2009. Output columns : journal.name,impact value ordered by decreasing impact value (break ties using journal name alphabetically). Note : only include those journals in the result which had at least 1 publication in the duration of previous two years(i.e. 2007-2008). 
+\item
+[25.] Calculate h-index (\url{https://en.wikipedia.org/wiki/H-index}) for each author. Output columns : author.name, h-index ordered by h-index value (decreasing) and break ties using author name alphabetically. 
+
 
 \end{enumerate}
 \end{document}

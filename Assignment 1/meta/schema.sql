@@ -2,13 +2,13 @@
 CREATE TABLE Paper (
     PaperId INTEGER,
     Title VARCHAR,
-    Year INTEGER,
+    year INTEGER,
     VenueId INTEGER
 );
 
 CREATE TABLE Author (
     AuthorId INTEGER,
-    AuthorName VARCHAR
+    name VARCHAR
 );
 
 CREATE TABLE PaperByAuthors (
@@ -18,11 +18,11 @@ CREATE TABLE PaperByAuthors (
 
 CREATE TABLE Citation (
     Paper1Id INTEGER,
-    Paper2id INTEGER
+    Paper2Id INTEGER
 );
 
 CREATE TABLE Venue (
     VenueId INTEGER,
-    VenueName VARCHAR,
-    VenueType VARCHAR
+    name VARCHAR,
+    type VARCHAR
 );
