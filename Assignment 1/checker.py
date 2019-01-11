@@ -81,8 +81,8 @@ def main(file):
 
         if part not in parts:
             err(
-                "Not all sections are present.\n"
-                "Make sure you create sections for each question, even if you leave them empty."
+                "Section not present: %s\n"
+                "Make sure you create sections for each question, even if you leave them empty." % part
             )
 
         with open(str(part)+".sql", "w") as f:
@@ -92,7 +92,10 @@ def main(file):
 
     # Nothing should remain at this point
     if parts:
-        err("Extra sections are present. Remove them.")
+        err(
+            "Extra sections present: %s \n" 
+            "Remove them." % ",".join(parts.keys())
+        )
 
 if __name__ == "__main__":
     main(sys.argv[1])
