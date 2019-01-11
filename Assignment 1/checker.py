@@ -15,7 +15,7 @@ Requires Parsing:
 * Ensure they don't use "modification commands" DROP TABLE, INSERT INTO, etc?
     * This doesn't really matter, because the user won't have edit rights anyway.
 
-* Extract all Created Views, so that we can later drop them
+* Extract all created Views, so that we can drop them later
 
 Suggestions for doc:
 
@@ -29,7 +29,7 @@ import os
 import re
 
 
-numQ = 22
+TOTAL_QUESTIONS = 22
 
 def err(*msg):
     print(*msg)
@@ -47,20 +47,48 @@ def main(file):
     
     # int -> string
     parts = {}
+    data = ""
+    Q = 1
 
+    # Build parts dict
     for l in flines[1:]:
 
-        m = re.match(r"--(\d+)--", l)
-        if m:
-            q = m.group(1)
-            print(l, q)
+        if not l:
+            continue
 
-    if list(sorted(parts.keys())) != ["PREAMBLE"] + list(range(1,numQ+1)):
-        err(
-            "Not all parts are present.\n"
-            "Make sure you create sections for each question, even if you leave them empty."
-        )
+        # Since we've already dealt with Preamble
+        # A new section is either a question or cleanup
+        if l == "--%d--" % Q:
+            if Q == 1:
+                parts["preamble"] = data
+            else:
+                parts[Q-1] = data
+
+            Q += 1
+            data = ""
+
+        elif Q == TOTAL_QUESTIONS and l == "--CLEANUP--":
+            parts[Q-1] = data
+            Q += 1
+            data = ""
+
+        else:
+            data += l + "\n"
+
+    # The last part is cleanup
+    parts["cleanup"] = data
+
+    # Dump parts dict into individual files
+    for part in range(1, TOTAL_QUESTIONS + 1) + ["preamble", "cleanup"]:
+
+        if part not in parts:
+            err(
+                "Not all parts are present.\n"
+                "Make sure you create sections for each question, even if you leave them empty."
+            )
+
+        with open(str(part)+".sql", "w") as f:
+            f.write(data)
 
 if __name__ == "__main__":
-
     main(sys.argv[1])
