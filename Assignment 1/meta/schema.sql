@@ -26,3 +26,4 @@ CREATE TABLE Venue (
     name VARCHAR,
     type VARCHAR
 );
+

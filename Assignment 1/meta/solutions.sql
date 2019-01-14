@@ -6,7 +6,7 @@ create view papers_per_author as (select AuthorId,count(*) as cnt from PaperByAu
 
 -- 1) --
 
-select type,count(PaperId) from Paper P,Venue V where P.VenueId=V.VenueId group by type;
+select type,count(PaperId) as cnt from Paper P,Venue V where P.VenueId=V.VenueId group by type order by cnt desc,type asc;
 
 -- 2) --
 
@@ -38,12 +38,12 @@ select A.name from (select PA.AuthorId from authors_per_paper temp,PaperByAuthor
 
 -- 9) --
 
-(select distinct(A.name) from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2012 group by A.AuthorId,A.name having count(*)>=2) INTERSECT (select distinct A.name from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2013 group by A.AuthorId,A.name having count(*)>=3 )) ;
+(select distinct(A.name) from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2012 group by A.AuthorId,A.name having count(*)>=2 order by A.name) INTERSECT (select distinct A.name from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2013 group by A.AuthorId,A.name having count(*)>=3 order by A.name) ;
 
 
 -- 10) --
 
-select temp.name from (select A.name,count(PA.PaperId) as paper_count from Author A,PaperByAuthors PA,Paper P,Venue V where A.AuthorId=PA.AuthorId and P.PaperId = PA.PaperId and V.VenueId = P.VenueId and V.type = 'journals' and V.name = 'corr' group by A.AuthorId,A.name order by paper_count desc) temp LIMIT 20;
+select temp.name from (select A.name,count(PA.PaperId) as paper_count from Author A,PaperByAuthors PA,Paper P,Venue V where A.AuthorId=PA.AuthorId and P.PaperId = PA.PaperId and V.VenueId = P.VenueId and V.type = 'journals' and V.name = 'corr' group by A.AuthorId,A.name order by paper_count desc,A.name asc) temp LIMIT 20;
 
 -- 11) --
 select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='amc' group by PA.AuthorId,A.name having count(*)>3 order by A.name asc;
@@ -54,7 +54,7 @@ select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A
 
 -- 13) --
 
-select P.year,count(*) from Paper P,Venue V where P.VenueId = V.VenueId and P.year between 2004 and 2013 group by P.year;
+select P.year,count(*) from Paper P,Venue V where P.VenueId = V.VenueId and P.year between 2004 and 2013 group by P.year order by P.year;
 
 -- 14 --
 
@@ -63,7 +63,7 @@ lower(P.Title) LIKE '%query%optimization%';
 
 -- 15 --
 
-select temp.Title from ( select P.Title, count(*) as cnt from Paper P, Citation C where P.PaperId = C.Paper2Id group by C.Paper2Id,P.Title) temp order by temp.cnt desc;
+select temp.Title from ( select P.Title, count(*) as cnt from Paper P, Citation C where P.PaperId = C.Paper2Id group by C.Paper2Id,P.Title) temp order by temp.cnt desc,P.Title asc;
 
 -- 16 --
 
@@ -84,7 +84,7 @@ select distinct A.name from Author A,PaperByAuthors p1,PaperByAuthors p2,Citatio
 -- 20 --
 
 select temp.name from 
-((select distinct A.name from Author A, Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='corr' and P.year between 2009 and 2013) except (select distinct A.name from Author A, Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='ieicet' and P.year=2019)) temp order by temp.name asc;
+((select distinct A.name from Author A, Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='corr' and P.year between 2009 and 2013) except (select distinct A.name from Author A, Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='ieicet' and P.year=2009)) temp order by temp.name asc;
 
 -- 21 --
 

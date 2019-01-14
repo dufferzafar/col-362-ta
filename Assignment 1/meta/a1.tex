@@ -136,7 +136,7 @@ copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
 \item
 [2.] What is the average number of authors per paper? Output column: the aggregate value. 
 \item
-[3.] List the titles of all entities with more than 20 authors order by alphabetically. Output column : paper.Title.
+[3.] List the titles of all papers with more than 20 authors order by alphabetically. Output column : paper.Title.
 \item
 [4.] List the names of all authors who never published as a single author order by alphabetically. Output column : author.name.
 \item
@@ -156,7 +156,7 @@ copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
 \item
 [12.] Two major journals are 'ieicet' and 'tcs' . Find all authors who published at least 10 'ieicet' papers but never published a 'tcs' paper order by alphabetically. Output column : author.name.
 \item
-[13.] Compute the total number of publications per year during 2004-2013. Output Column: (Year, No. of Publication).
+[13.] Compute the total number of publications per year during 2004-2013, in increasing order of year. Output Column: (Year, No. of Publication).
 \item
 [14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) ? Output column: count. 
 \item
