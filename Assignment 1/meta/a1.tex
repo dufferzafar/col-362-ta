@@ -12,7 +12,7 @@
 \renewcommand{\baselinestretch}{0.97}
 \title{Assignment 1}
 
-\date{Due date: January -, 2019, 11:55pm IST}
+\date{Due date: January 22, 2019, 11:55pm IST}
 
 \begin{document}
 
@@ -20,27 +20,27 @@
 \paragraph*{General Instructions}
 
 
-\begin{itemize}
+\begin{enumerate}
+	
+\item Please complete this assignment \emph{individually}, on your own.
 
-\item[1.]You will submit 2 files: Fname1Lname1-Fname2Lname2.sql and Fname1Lname1-Fname2Lname2.pdf, corresponding to the dataset and a timings report, respectively.
+\item You will submit 2 files: EntryNumber.sql and EntryNumber.pdf, corresponding to the dataset and a timings report, respectively.
 
-\item[2.]Use PostgreSQL 11 for your homework. See \url{https://www.postgresql.org/download/} for instructions
+\item Use PostgreSQL 11 for your homework. See \url{https://www.postgresql.org/download/} for instructions
 on how to download and install it on your OS. The .sql files are run automatically using the psql command using the \textbackslash i option, so please ensure that there are no syntax errors in the file. {\it If we are unable to run your file, you get an automatic reduction to 0 marks.}
 
 
-To understand how to run many queries at once from text file, a dummy query file example.sql is available in 
-\url{www.cse.iitd.ac.in/~mcs172071/example.sql}. To run example.sql in postgres, type the following command in the terminal:
+To understand how to run many queries at once from text file, a dummy query file example.sql is available. To run example.sql in postgres, type the following command in the terminal:
 
-sudo -u postgres psql dbname
+\verbatim{sudo -u postgres psql dbname}
 
 and then type 
 
-\textbackslash i /address/to/example.sql
+{\tt \textbackslash i /address/to/example.sql}
 
 This command will run all the queries listed in example.sql at once.  
 
-\item[3.] The format of the file should be as follows. You can have a preamble where you may create views if you like (please note that no procedures are allowed (this has to be pure sql), and correspondingly have a cleanup section where these views are removed. One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL
-query. Leave a blank line after each query. 
+\item The format of the file should be as follows. You can have a preamble where you may create views if you like (please note that no procedures are allowed (this has to be pure sql), and correspondingly have a cleanup section where these views are removed. One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL query. Leave a blank line after each query. 
 
 - -PREAMBLE- -
 
@@ -62,29 +62,29 @@ SQL QUERY
 
 CLEANUP EVERYTHING YOU CREATED HERE
 
-\item[4.] All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
+\item All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
 
-\item[5.] Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded. 
+\item Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded. 
 
-\item[6.] Assume set semantics, unless stated otherwise.
+\item Assume set semantics, unless stated otherwise.
 
-\item[7.] No changes are allowed in the i) data, ii) attribute names, iii) table names
+\item No changes are allowed in the i) data, ii) attribute names, iii) table names
 
-\item[8.] The .pdf file should contain a bar graph corresponding to the dataset. The graph should report the timings for each query of the dataset (X-axis legend is the query number, Y-axis legend is the time taken).
+\item The .pdf file should contain a bar graph. The graph should report the timings for each query of the dataset (X-axis legend is the query number, Y-axis legend is the time taken). You will need to figure out how to measure the timings.
 
-\item[9.] The submission will be done on Moodle. Details regarding submission and auto evaluation will be updated on piazza.
-\end{itemize}
+\item The submission will be done on Moodle. Details regarding submission and auto evaluation will be updated on piazza.
+\end{enumerate}
+
 \section{Dataset}
 
 \subsection{Instructions}
 
-\begin{itemize}
+\begin{enumerate}
+\item In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from  \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. The zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
 
-\item[1.] In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from  \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. The zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
+{\tt copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';}
 
-copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
-
-\item[2.] The database will include following five tables and you should use only these tables while writing solution of the queries. You can create temporary tables while handling any SQL query but you should include SQL queries for creating and deleting these temporary tables. Note - you don't have to define these tables in the submission file, these will already be present will evaluation.
+\item The database will include following five tables and you should use only these tables while writing solution of the queries. You can create temporary tables while handling any SQL query but you should include SQL queries for creating and deleting these temporary tables. Note - you don't have to define these tables in the submission file, these will already be present will evaluation.
 
 
 \begin{enumerate}
@@ -126,7 +126,7 @@ copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';
 \emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like 'journals' etc. 
 \end{enumerate}
 
-\end{itemize}
+\end{enumerate}
 
 \subsection{Queries}
 
