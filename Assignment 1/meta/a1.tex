@@ -32,36 +32,51 @@ on how to download and install it on your OS. The .sql files are run automatical
 
 To understand how to run many queries at once from text file, a dummy query file example.sql is available. To run example.sql in postgres, type the following command in the terminal:
 
-\verbatim{sudo -u postgres psql dbname}
-
-and then type 
-
-{\tt \textbackslash i /address/to/example.sql}
+\begin{verbatim} sudo -u postgres psql dbname \end{verbatim}
+    
+    and then type 
+    
+\begin{verbatim} \i /address/to/example.sql \end{verbatim}
 
 This command will run all the queries listed in example.sql at once.  
 
-\item The format of the file should be as follows. You can have a preamble where you may create views if you like (please note that no procedures are allowed (this has to be pure sql), and correspondingly have a cleanup section where these views are removed. One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL query. Leave a blank line after each query. 
+\item The format of the file should be as follows: 
 
-- -PREAMBLE- -
+\begin{itemize}
+    \item You can have a preamble section where you may create views if you like (please note that no procedures are allowed - this has to be pure sql), and correspondingly have a cleanup section where these views are removed. View names should begin with your Kerberos ID for eg. "mcs162015\_view1" is a valid view name. 
 
-OPTIONAL DEFINITIONS
+    \item One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL query. 
+    
+    \item Leave a blank line after each query. 
+\end{itemize}
 
-- -1- -
+\begin{verbatim}
+    
+    --PREAMBLE--
+    
+    OPTIONAL DEFINITIONS
+    
+    --1--
+    
+    SQL QUERY
+    
+    --2--
+    
+    SQL QUERY
+    
+    --3--
+    
+    SQL QUERY
+    
+    --CLEANUP--
+    
+    CLEANUP EVERYTHING YOU CREATED HERE
 
-SQL QUERY
+\end{verbatim}
 
-- -2- -
-
-SQL QUERY
-
-- -3- -
-
-SQL QUERY
-
-- -CLEANUP- -
-
-CLEANUP EVERYTHING YOU CREATED HERE
-
+% \item None of the queries require you to make any 
+\item Make sure you do not use any queries like INSERT, DELETE or any meta-command in the submission file.
+    
 \item All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
 
 \item Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded. 
@@ -80,7 +95,12 @@ CLEANUP EVERYTHING YOU CREATED HERE
 \subsection{Instructions}
 
 \begin{enumerate}
-\item In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from  \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. The zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
+
+\item In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. 
+
+You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. 
+
+The data.zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
 
 {\tt copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';}
 
@@ -185,5 +205,3 @@ CLEANUP EVERYTHING YOU CREATED HERE
 
 \end{enumerate}
 \end{document}
-
-
