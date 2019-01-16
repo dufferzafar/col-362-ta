@@ -8,19 +8,6 @@ Create a cleanup.sql
 Checks Performed:
 
 * Check whether all sections exist: Preamble, N sections, Cleanup
-
-Requires Parsing:
-
-* Ensure they don't create views inside query sections?
-* Ensure they don't use "modification commands" DROP TABLE, INSERT INTO, etc?
-    * This doesn't really matter, because the user won't have edit rights anyway.
-
-* Extract all created Views, so that we can drop them later
-
-Suggestions for doc:
-
-* Remove cleanup section?
-    * We'll do cleanup ourself?
 """
 
 
@@ -28,8 +15,7 @@ import sys
 import os
 import re
 
-
-TOTAL_QUESTIONS = 22
+TOTAL_QUESTIONS = 25
 
 def err(*msg):
     print(*msg)
@@ -59,7 +45,7 @@ def main(file):
 
         # Since we've already dealt with Preamble
         # A new section is either a question or cleanup
-        m = re.match(r"--(\d+|CLEANUP)--", l)
+        m = re.match(r"--\s*(\d+|CLEANUP)\s*--", l)
         if m:
             # Save old part
             parts[part] = data
@@ -82,12 +68,19 @@ def main(file):
         if part not in parts:
             err(
                 "Section not present: %s\n"
-                "Make sure you create sections for each question, even if you leave them empty." % part
+                "Make sure you create sections for each question, even if you leave them empty." % part.upper()
             )
 
-        with open(str(part)+".sql", "w") as f:
+        if part in ["preamble", "cleanup"]:
+            fn = part + ".sql"
+        else:
+            fn = "part-%s.sql" % part
+
+        # Write to separate file
+        with open(fn, "w") as f:
             f.write(parts[part])
 
+        # Remove this part from dict
         parts.pop(part)
 
     # Nothing should remain at this point
@@ -96,6 +89,8 @@ def main(file):
             "Extra sections present: %s \n" 
             "Remove them." % ",".join(parts.keys())
         )
+
+    print("File is of the correct format.")
 
 if __name__ == "__main__":
     main(sys.argv[1])
