@@ -62,24 +62,17 @@
     CREATE DATABASE vpl_db;
 
     -- Connect to vpl_db
-    -- CREATE SCHEMA vpl_schema;
-
-    -- Connect to vpl_db
-    -- CREATE TABLES
     \c vpl_db
+    
+    -- CREATE TABLES
     \i meta/schema.sql
 
-    REVOKE ALL ON SCHEMA public FROM public;
-    GRANT ALL ON SCHEMA public TO postgres;
+    -- revoke all the priviledges on original tables from vpl_user -- 
+    REVOKE ALL ON Paper, Author, PaperByAuthors, Citation, Venue FROM vpl_user;
 
-    REVOKE ALL ON DATABASE vpl_db FROM public;
-    GRANT ALL ON DATABASE vpl_db TO postgres;
-    
-    GRANT CONNECT ON DATABASE vpl_db TO vpl_user;
+    -- grant only select priviledges on orginal tables to vpl_user --
     GRANT SELECT ON Paper, Author, PaperByAuthors, Citation, Venue TO vpl_user;
-
-    GRANT USAGE ON schema public TO vpl_user;
-    GRANT CREATE ON schema public TO vpl_user;
+    
     ```
 
 ## Assignment 1 with VPL
