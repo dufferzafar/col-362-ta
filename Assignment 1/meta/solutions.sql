@@ -114,12 +114,8 @@ with numpublications as
 from Paper join Venue on Paper.VenueId = Venue.VenueId
 where Venue.type='journals' and (Paper.year=2007 or Paper.year=2008)
 group by Venue.name),
-numcitations as
-(select Venue.name as name, count(*) as num_citations
-from (Paper join Venue on Paper.VenueId = Venue.VenueId) join Citation on Citation.Paper2Id=Paper.PaperId
-where Venue.type='journals' and (Paper.year=2007 or Paper.year=2008)
-group by Venue.name)
-select np.name as journal_name, num_citations/num_publications as impact_value
+numcitations as (select V.name as name, count(*) as num_citations from Venue V,Citation C,Paper P1,Paper P2 where V.type='journals' and V.venueid= P1.venueid and P1.year=2009 and P1.paperId=C.paper1id and P2.paperid = c.paper2id and (P2.year=2007 or P2.year=2008) group by V.name)
+select np.name as journal_name, num_citations*1.0/num_publications as impact_value
 from numpublications np,numcitations nc where num_publications>0 and np.name=nc.name
 order by impact_value desc, journal_name asc;
 
@@ -135,6 +131,7 @@ from (SELECT PA.AuthorId, PA.PaperId, COUNT(c.Paper1Id) AS citations_count,
      ) t
 where ranking <= citations_count
 group by AuthorId) final_res ,Author A where A.AuthorId = final_res.AuthorId order by A.name;
+
 
 --CLEANUP--
 
