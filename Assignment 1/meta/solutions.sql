@@ -10,6 +10,9 @@ create view papers_in_2010 as (select V.VenueId, count(*) as cnt from Venue V,Pa
 create view papers_in_2011 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2011 group by V.VenueId);
 create view papers_in_2012 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2012 group by V.VenueId);
 create view papers_in_2013 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2013 group by V.VenueId);
+
+Create view num_papers_per_author_per_venue AS (select V.name as vname, A.name as aname,count(*) as cnt from Venue V,Author A,PaperByAuthors PA, Paper P where V.VenueId = P.VenueId and PA.AuthorId=A.AuthorId and P.PaperId=PA.PaperId and V.type='journals' group by A.name,V.name);
+
 --1--
 
 select type,count(PaperId) as cnt from Paper P,Venue V where P.VenueId=V.VenueId group by type order by cnt desc,type asc;
@@ -102,9 +105,7 @@ order by cnt desc) out LIMIT 1;
 
 --23--
 
-select V.name,A.name,count(*) from Venue V,Author A,PaperByAuthors PA, Paper P where V.VenueId = P.VenueId and PA.AuthorId=A.AuthorId and P.PaperId=PA.PaperId group by A.name,V.name;
-
-
+select t1.vname, t1.aname from num_papers_per_author_per_venue t1, (select vname, MAX(cnt) as mcnt from num_papers_per_author_per_venue GROUP BY vname) t2 where t1.vname = t2.vname and t1.cnt = t2.mcnt order by t1.vname, t1.aname; 
 
 --24--
 
@@ -144,3 +145,4 @@ drop view papers_in_2010;
 drop view papers_in_2011;
 drop view papers_in_2012;
 drop view papers_in_2013;
+drop view num_papers_per_author_per_venue;
