@@ -69,12 +69,17 @@
         \c vpl_db
         \i meta/schema.sql
 
-        REVOKE ALL ON SCHEMA public FROM vpl_user;
-        REVOKE ALL ON DATABASE vpl_db FROM vpl_user;
+        REVOKE ALL ON SCHEMA public FROM public;
+        GRANT ALL ON SCHEMA public TO postgres;
 
+        REVOKE ALL ON DATABASE vpl_db FROM public;
+        GRANT ALL ON DATABASE vpl_db TO postgres;
+        
         GRANT CONNECT ON DATABASE vpl_db TO vpl_user;
         GRANT SELECT ON Paper, Author, PaperByAuthors, Citation, Venue TO vpl_user;
 
+        GRANT USAGE ON schema public TO vpl_user;
+        GRANT CREATE ON schema public TO vpl_user;
         ```
 
 ## Assignment 1 with VPL
@@ -89,8 +94,6 @@
         + Are the queries correct?
         + Ambiguities?
 
-    - How will grading happen?
-
     - What if psql throws an error?
 
     - Grade in background but don't show
@@ -104,10 +107,10 @@
         - Create new database for every evaluation?
             - `WITH TEMPLATE`
             - Resource usage, Timing? - Depends on test dataset
-        - Instead of creating a new database, create a schema?
-            - So that all new views are created inside it
-            - and we can later drop the schema easily
 
+    - TODO: Check if sql files can contain `\` commands
+
+    - Setup DB on VPL 2/3
 
 ```bash
 ip addr show dev ens3 | grep "inet " | perl -ne '/inet (.*)\// && print $1'
