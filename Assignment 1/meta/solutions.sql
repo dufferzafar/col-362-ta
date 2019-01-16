@@ -22,7 +22,7 @@ select avg(cnt) from authors_per_paper;
 
 select Title from Paper P,authors_per_paper temp where temp.cnt>20 and P.PaperId=temp.PaperId order by Title;
 
---4 - 
+--4-- 
 
 (select name from Author order by name) except (select A.name from Author A,PaperByAuthors PA1,authors_per_paper temp where A.AuthorId = PA1.AuthorId and PA1.PaperId=temp.PaperId and temp.cnt=1 order by A.name);
 
@@ -38,7 +38,7 @@ select A.name from (select PA.AuthorId from authors_per_paper temp,PaperByAuthor
 --7--
 (select distinct(name) from Author order by name) except (select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId=PA.AuthorId and P.PaperId = PA.PaperId and V.VenueId = P.VenueId and V.type='journals' order by A.name);
 
---8 - 
+--8-- 
 (select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type='journals' order by A.name) except 
 (select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type!='journals' order by A.name);
 
