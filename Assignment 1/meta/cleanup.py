@@ -80,6 +80,11 @@ for line in tqdm(f, ascii=True):
     parseRecord(line)
 
 
+# Removing redundant data
+# 2 tuple list paperId,authorId
+
+paper_by_authors = list(set(paper_by_authors))  
+citation = list(set(citation))
 
 # print to tsv tables (tab seperated)
 
