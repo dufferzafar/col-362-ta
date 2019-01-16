@@ -20,15 +20,15 @@ fi
 ipaddr=$(ip addr show dev ens3 | grep "inet " | perl -ne '/inet (.*)\// && print $1')
 
 # Run preamble
-psql -t -h "$ipaddr" -p 5432 -u vpl_user -d vpl_db -f preamble.sql
+psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f preamble.sql
 
 # Run queries
 for part in part-*.sql; do
-    psql -t -h "$ipaddr" -p 5432 -u vpl_user -d vpl_db -f "$part" > "$part.out"
+    psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f "$part" > "$part.out"
 done
 
 # Run cleanup
-psql -t -h "$ipaddr" -p 5432 -u vpl_user -d vpl_db -f cleanup.sql
+psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f cleanup.sql
 
 # Match output with model solution
 grade=0
