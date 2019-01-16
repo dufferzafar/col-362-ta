@@ -21,7 +21,7 @@
 
 
 \begin{enumerate}
-	
+
 \item Please complete this assignment \emph{individually}, on your own.
 
 \item You will submit 2 files: EntryNumber.sql and EntryNumber.pdf, corresponding to the dataset and a timings report, respectively.
@@ -33,53 +33,53 @@ on how to download and install it on your OS. The .sql files are run automatical
 To understand how to run many queries at once from text file, a dummy query file example.sql is available. To run example.sql in postgres, type the following command in the terminal:
 
 \begin{verbatim} sudo -u postgres psql dbname \end{verbatim}
-    
-    and then type 
-    
+
+    and then type
+
 \begin{verbatim} \i /address/to/example.sql \end{verbatim}
 
-This command will run all the queries listed in example.sql at once.  
+This command will run all the queries listed in example.sql at once.
 
-\item The format of the file should be as follows: 
+\item The format of the file should be as follows:
 
 \begin{itemize}
-    \item You can have a preamble section where you may create views if you like (please note that no procedures are allowed - this has to be pure sql), and correspondingly have a cleanup section where these views are removed. View names should begin with your Kerberos ID for eg. "mcs162015\_view1" is a valid view name. 
+    \item You can have a preamble section where you may create views if you like (please note that no procedures are allowed - this has to be pure sql), and correspondingly have a cleanup section where these views are removed. View names should begin with your Kerberos ID for eg. "mcs162015\_view1" is a valid view name.
 
-    \item One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL query. 
-    
-    \item Leave a blank line after each query. 
+    \item One line should identify the query number (note the two hyphens before and after the query number), followed by the actual, syntactically correct SQL query.
+
+    \item Leave a blank line after each query.
 \end{itemize}
 
 \begin{verbatim}
-    
+
     --PREAMBLE--
-    
+
     OPTIONAL DEFINITIONS
-    
+
     --1--
-    
+
     SQL QUERY
-    
+
     --2--
-    
+
     SQL QUERY
-    
+
     --3--
-    
+
     SQL QUERY
-    
+
     --CLEANUP--
-    
+
     CLEANUP EVERYTHING YOU CREATED HERE
 
 \end{verbatim}
 
-% \item None of the queries require you to make any 
+% \item None of the queries require you to make any
 \item Make sure you do not use any queries like INSERT, DELETE or any meta-command in the submission file.
-    
-\item All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded. 
 
-\item Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded. 
+\item All of the queries below require an 'ORDER BY' clause. If you made an error in this clause, your answer will be evaluated as incorrect and zero marks will be awarded.
+
+\item Errors with respect to equality and inequality conditions will also be evaluated as incorrect and zero marks will be awarded.
 
 \item Assume set semantics, unless stated otherwise.
 
@@ -96,11 +96,11 @@ This command will run all the queries listed in example.sql at once.
 
 \begin{enumerate}
 
-\item In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}. 
+\item In this assignment you will analyze publication data i.e. DBLP, the reference citation website created and maintained by Michael Ley. The analysis has to  be done in postgres. We are providing you cleaned up data and you can download it from \url{www.cse.iitd.ac.in/~mcs172071/dataset.zip}.
 
-You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}. 
+You can get more information about the DBLP from \url{http://dblp.uni-trier.de/xml/docu/dblpxml.pdf}.
 
-The data.zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command - 
+The data.zip file contains a tab seperated file for each table described below.(Note the order of values in file is same as attributes of table given in next bullet point). You can load the table into database from tsv file using the command -
 
 {\tt copy Author from '/path/to/file/Author.tsv' DELIMITER E'\textbackslash t';}
 
@@ -116,20 +116,20 @@ The data.zip file contains a tab seperated file for each table described below.(
         \end{tabular}
 \item Author\\
         \begin{tabular}{|c|c|}
-            \hline 
+            \hline
              AuthorId : int & name : text \\
             \hline
         \end{tabular}
 
 \item PaperByAuthors\\
         \begin{tabular}{|c|c|}
-            \hline 
+            \hline
              AuthorId : int & PaperId : int \\
             \hline
         \end{tabular}
 \item Citation\\
         \begin{tabular}{|c|c|}
-            \hline 
+            \hline
              Paper1Id : int & Paper2Id : int \\
             \hline
         \end{tabular}
@@ -138,12 +138,12 @@ The data.zip file contains a tab seperated file for each table described below.(
 
 \item Venue\\
         \begin{tabular}{|c|c|c|}
-            \hline 
+            \hline
              VenueId : int & name : text & type : text\\
             \hline
         \end{tabular}
 
-\emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like 'journals' etc. 
+\emph{Note:} Here 'name' is acronym of Venue and 'type' is the type of Venue like 'journals' etc.
 \end{enumerate}
 
 \end{enumerate}
@@ -152,9 +152,9 @@ The data.zip file contains a tab seperated file for each table described below.(
 
 \begin{enumerate}
 \item
-[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (journals, 30000), ... Order the output columns in decreasing order of counts and break ties using publication-type alphabetically. 
+[1.] For each type of venue, count the total number of publication presented at that type of venue. Your query should return a set of (publication-type, count) pairs. For example: (journals, 30000), ... Order the output columns in decreasing order of counts and break ties using publication-type alphabetically.
 \item
-[2.] What is the average number of authors per paper? Output column: the aggregate value. 
+[2.] What is the average number of authors per paper? Output column: the aggregate value.
 \item
 [3.] List the titles of all papers with more than 20 authors order by alphabetically. Output column : paper.Title.
 \item
@@ -178,29 +178,29 @@ The data.zip file contains a tab seperated file for each table described below.(
 \item
 [13.] Compute the total number of publications per year during 2004-2013, in increasing order of year. Output Column: (Year, No. of Publication).
 \item
-[14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) ? Output column: count. 
+[14.] How many (distinct) authors have papers with “query optimization” in the title (case insensitive) ? Output column: count.
 \item
 [15.] Write an SQL query that lists the titles of the most cited papers order by decreasing number of citation (break ties using alphabetic order). Output column : paper.Title.
 \item
-[16.] Write an SQL query that  list the titles of all publications that have been cited more than 10 times order by alphabetically. Output column : paper.Title. 
+[16.] Write an SQL query that  list the titles of all publications that have been cited more than 10 times order by alphabetically. Output column : paper.Title.
 \item
 [17.] Write an SQL query that list the titles of all publications that are cited more than they cite by a margin of at least 10 order by alphabetically. Output column : paper.Title.
 \item
 [18.] Write an SQL query that list the titles of papers that have never been cited order by alphabetically. Output column : paper.Title.
 \item
-[19.] Write an SQL query that list the names of all authors who have published papers citing other papers by themselves order by alphabetically. Output column : author.name. 
+[19.] Write an SQL query that list the names of all authors who have published papers citing other papers by themselves order by alphabetically. Output column : author.name.
 \item
 [20.] Who are the authors who published in any 'corr' journal between 2009 and 2013 but not in 'ieicet' 2009 journal? Output column: author.name order by alphabetically.
-\item 
-[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically. 
-\item  
+\item
+[21.] What is (are) the journal(s) that has (have) a strictly increasing number of papers every year from 2009 to 2013? Output column: journal.name order by alphabetically.
+\item
 [22.] What is (are) the journal/year(s) (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year. If there are multiple answers, return all ordered by year(increasing) and break ties using journal.name alphabetically.
 \item
 [23.] List the author that have maximum publications in each journal, sorted alphabetically by journal name. Output columns : journal.name,author.name .  
 \item
-[24.] Calculate the journal impact factor (\url{https://en.wikipedia.org/wiki/Impact_factor}) for each journal for year 2009. Output columns : journal.name,impact value ordered by decreasing impact value (break ties using journal name alphabetically). Note : only include those journals in the result which had at least 1 publication in the duration of previous two years(i.e. 2007-2008). 
+[24.] Calculate the journal impact factor (\url{https://en.wikipedia.org/wiki/Impact_factor}) for each journal for year 2009. Output columns : journal.name,impact value ordered by decreasing impact value (break ties using journal name alphabetically). Note : only include those journals in the result which had at least 1 publication in the duration of previous two years(i.e. 2007-2008).
 \item
-[25.] Calculate h-index (\url{https://en.wikipedia.org/wiki/H-index}) for each author. Output columns : author.name, h-index ordered by h-index value (decreasing) and break ties using author name alphabetically. 
+[25.] Calculate h-index (\url{https://en.wikipedia.org/wiki/H-index}) for each author. Output columns : author.name, h-index ordered by h-index value (decreasing) and break ties using author name alphabetically.
 
 
 \end{enumerate}
