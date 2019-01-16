@@ -53,27 +53,36 @@
 * Setting up 3rd server
 
 * Setting up roles and database, on `vpl1`
+    - Creating user, database and settting permissions
+        ```sql
+        DROP DATABASE vpl_db;
+        DROP ROLE vpl_user;
 
-    ```sql
-    DROP DATABASE vpl_db;
-    DROP ROLE vpl_user;
+        CREATE ROLE vpl_user WITH LOGIN;
+        CREATE DATABASE vpl_db;
 
-    CREATE ROLE vpl_user WITH LOGIN;
-    CREATE DATABASE vpl_db;
+        -- Connect to vpl_db
+        \c vpl_db
+        
+        -- CREATE TABLES
+        \i meta/schema.sql
 
-    -- Connect to vpl_db
-    \c vpl_db
-    
-    -- CREATE TABLES
-    \i meta/schema.sql
+        -- revoke all the priviledges on original tables from vpl_user -- 
+        REVOKE ALL ON Paper, Author, PaperByAuthors, Citation, Venue FROM vpl_user;
 
-    -- revoke all the priviledges on original tables from vpl_user -- 
-    REVOKE ALL ON Paper, Author, PaperByAuthors, Citation, Venue FROM vpl_user;
+        -- grant only select priviledges on orginal tables to vpl_user --
+        GRANT SELECT ON Paper, Author, PaperByAuthors, Citation, Venue TO vpl_user;
+        
+        ```
+    - Loading evaluation database
 
-    -- grant only select priviledges on orginal tables to vpl_user --
-    GRANT SELECT ON Paper, Author, PaperByAuthors, Citation, Venue TO vpl_user;
-    
-    ```
+        ```sql
+        \copy Author FROM 'meta/eval_set/Author.tsv' DELIMITER E'\t';
+        \copy Citation FROM 'meta/eval_set/Citation.tsv' DELIMITER E'\t';
+        \copy PaperByAuthors FROM 'meta/eval_set/PaperByAuthors.tsv' DELIMITER E'\t';
+        \copy Paper FROM 'meta/eval_set/Paper.tsv' DELIMITER E'\t';
+        \copy Venue FROM 'meta/eval_set/Venue.tsv' DELIMITER E'\t';
+        ```
 
 ## Assignment 1 with VPL
 
