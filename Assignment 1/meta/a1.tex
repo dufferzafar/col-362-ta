@@ -12,7 +12,7 @@
 \renewcommand{\baselinestretch}{0.97}
 \title{Assignment 1}
 
-\date{Due date: January 22, 2019, 11:55pm IST}
+\date{Due date: January 22, 2019, 11:59pm IST}
 
 \begin{document}
 
@@ -24,7 +24,7 @@
 
 \item Please complete this assignment \emph{individually}, on your own.
 
-\item You will submit 2 files: EntryNumber.sql and EntryNumber.pdf, corresponding to the dataset and a timings report, respectively.
+\item You will submit 2 files: query.sql and EntryNumber.pdf, corresponding to the dataset and a timings report, respectively.
 
 \item Use PostgreSQL 11 for your homework. See \url{https://www.postgresql.org/download/} for instructions
 on how to download and install it on your OS. The .sql files are run automatically using the psql command using the \textbackslash i option, so please ensure that there are no syntax errors in the file. {\it If we are unable to run your file, you get an automatic reduction to 0 marks.}
@@ -200,8 +200,7 @@ The data.zip file contains a tab seperated file for each table described below.(
 \item
 [24.] Calculate the journal impact factor (\url{https://en.wikipedia.org/wiki/Impact_factor}) for each journal for year 2009. Output columns : journal.name,impact value ordered by decreasing impact value (break ties using journal name alphabetically). Note : only include those journals in the result which had at least 1 publication in the duration of previous two years(i.e. 2007-2008).
 \item
-[25.] Calculate h-index (\url{https://en.wikipedia.org/wiki/H-index}) for each author. Output columns : author.name, h-index ordered by h-index value (decreasing) and break ties using author name alphabetically.
-
+[25.] Calculate h-index (\url{https://en.wikipedia.org/wiki/H-index}) for each author. Output columns : author.name, h-index ordered by h-index value (decreasing) and break ties using author name alphabetically. Note: Do not include results for authors having no citations.
 
 \end{enumerate}
 \end{document}
