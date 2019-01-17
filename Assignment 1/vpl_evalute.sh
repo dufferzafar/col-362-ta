@@ -1,10 +1,11 @@
 #!/bin/bash
 
-. common_script.sh
+# . common_script.sh
 
 set_grade() {
     echo "#!/bin/bash" >> vpl_execution
-    echo "echo 'Grade :=>>$1'" >> vpl_execution
+    echo "echo 'Grade :=>> $1'" >> vpl_execution
+    chmod +x vpl_execution
 }
 
 # Test format and break into parts: part-1-25.sql
@@ -20,31 +21,33 @@ fi
 ipaddr=$(ip addr show dev ens3 | grep "inet " | perl -ne '/inet (.*)\// && print $1')
 
 # Run preamble
-psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f preamble.sql
+echo -e "\nRunning PREAMBLE queries"
+psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f preamble.sql > /dev/null
 
 # Run queries
-for part in part-*.sql; do
-    psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f "$part" > "$part.out"
+for part in $(seq 1 25); do
+    echo -e "\nRunning queries for Part $part"
+    psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f "part-$part.sql" > "part-$part.out"
+    # cat "$part.out"
 done
 
 # Run cleanup
-psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f cleanup.sql
+echo -e "\nRunning CLEANUP queries"
+psql -t -h "$ipaddr" -p 5432 -U vpl_user -d vpl_db -f cleanup.sql > /dev/null
 
 # Match output with model solution
 grade=0
 
-# Unzip model solutions: part-10.sql.model
-ls
-unzip model.zip
+# Model files are already present!
+tar --overwrite -xf model.tar
 
-for part in part-*.sql; do
-    # parts-13.sql.out parts-13.sql.model
-    diff -quB "$part.out" "$part.model"
-
-    # if diff says zero, +5
-    if [ $? -eq 0 ]; then
+# Match all parts
+for part in $(seq 1 25); do
+    diff -qB "part-$part.out" "part-$part.model" > /dev/null 2>&1
+    error=$?
+    if [ $error -eq 0 ]; then
         grade=$((grade+4))
     fi
 done
 
-set_grade grade;
+set_grade $grade;
