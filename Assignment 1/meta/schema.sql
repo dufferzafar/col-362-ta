@@ -12,8 +12,8 @@ CREATE TABLE Author (
 );
 
 CREATE TABLE PaperByAuthors (
-    AuthorId INTEGER,
-    PaperId INTEGER
+    PaperId INTEGER,
+    AuthorId INTEGER
 );
 
 CREATE TABLE Citation (
