@@ -196,7 +196,7 @@ The data.zip file contains a tab seperated file for each table described below.(
 \item
 [22.] What is (are) the journal/year(s) (e.g., corr 2001) which had the largest number of papers? Output columns: journal.name, journal.year. If there are multiple answers, return all ordered by year(increasing) and break ties using journal.name alphabetically.
 \item
-[23.] List the author that have maximum publications in each journal, sorted alphabetically by journal name. Output columns : journal.name,author.name .  
+[23.] List the author that have maximum publications in each journal, sorted alphabetically by journal name. If there are multiple answers for a journal, return them by ordered by author name alphabetically. Output columns : journal.name, author.name.
 \item
 [24.] Calculate the journal impact factor (\url{https://en.wikipedia.org/wiki/Impact_factor}) for each journal for year 2009. Output columns : journal.name,impact value ordered by decreasing impact value (break ties using journal name alphabetically). Note : only include those journals in the result which had at least 1 publication in the duration of previous two years(i.e. 2007-2008).
 \item
