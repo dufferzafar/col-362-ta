@@ -121,7 +121,7 @@ order by impact_value desc, journal_name asc;
 
 --25--
 
-select A.name from (select AuthorId, count(*)
+select A.name,final_res.cnt from (select AuthorId, count(*) as cnt
 from (SELECT PA.AuthorId, PA.PaperId, COUNT(c.Paper1Id) AS citations_count,
              rank() over (partition by PA.AuthorId, PA.PaperId order by count(c.Paper1Id) desc) as ranking
       FROM PaperByAuthors PA LEFT OUTER JOIN
@@ -130,7 +130,7 @@ from (SELECT PA.AuthorId, PA.PaperId, COUNT(c.Paper1Id) AS citations_count,
       GROUP BY PA.AuthorId, PA.PaperId
      ) t
 where ranking <= citations_count
-group by AuthorId) final_res ,Author A where A.AuthorId = final_res.AuthorId order by A.name;
+group by AuthorId) final_res ,Author A where A.AuthorId = final_res.AuthorId order by final_res.cnt desc,A.name asc;
 
 
 --CLEANUP--
