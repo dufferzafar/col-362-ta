@@ -87,7 +87,7 @@ select P.Title from Paper P,(select Paper2Id as id,count(*) as cnt from Citation
 
 --19--
 
-select distinct A.name from Author A,PaperByAuthors p1,PaperByAuthors p2,Citation C where C.Paper1Id = p1.PaperId and C.paper2Id = p2.paperId and A.AuthorId = p1.AuthorId and A.AuthorId = p2.AuthorId order by A.name;
+select distinct A.name from Author A,PaperByAuthors p1,PaperByAuthors p2,Citation C where C.Paper1Id = p1.PaperId and C.paper2Id = p2.paperId and A.AuthorId = p1.AuthorId and A.AuthorId = p2.AuthorId and p1.paperId!=p2.paperId order by A.name;
 
 --20--
 
