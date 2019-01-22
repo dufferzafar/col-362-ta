@@ -10,7 +10,7 @@ create view papers_in_2010 as (select V.VenueId, count(*) as cnt from Venue V,Pa
 create view papers_in_2011 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2011 group by V.VenueId);
 create view papers_in_2012 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2012 group by V.VenueId);
 create view papers_in_2013 as (select V.VenueId, count(*) as cnt from Venue V,Paper P where P.VenueId=V.VenueId and V.type='journals' and P.year=2013 group by V.VenueId);
-
+CREATE VIEW q_25 as SELECT citation.paper2id AS paperid, count(citation.paper1id) AS count FROM citation GROUP BY citation.paper2id;
 Create view num_papers_per_author_per_venue AS (select V.name as vname, A.name as aname,count(*) as cnt from Venue V,Author A,PaperByAuthors PA, Paper P where V.VenueId = P.VenueId and PA.AuthorId=A.AuthorId and P.PaperId=PA.PaperId and V.type='journals' group by A.name,V.name);
 
 --1--
@@ -27,7 +27,7 @@ select Title from Paper P,authors_per_paper temp where temp.cnt>20 and P.PaperId
 
 --4-- 
 
-(select name from Author order by name) except (select A.name from Author A,PaperByAuthors PA1,authors_per_paper temp where A.AuthorId = PA1.AuthorId and PA1.PaperId=temp.PaperId and temp.cnt=1 order by A.name);
+select distinct temp.name from ((select name from Author order by name) except (select A.name from Author A,PaperByAuthors PA1,authors_per_paper temp where A.AuthorId = PA1.AuthorId and PA1.PaperId=temp.PaperId and temp.cnt=1 order by A.name)) temp order by temp.name;
 
 --5--
 
@@ -39,15 +39,16 @@ from Author A,papers_per_author temp where A.AuthorId=temp.AuthorId order by tem
 select A.name from (select PA.AuthorId from authors_per_paper temp,PaperByAuthors PA where temp.cnt=1 and temp.PaperId = PA.PaperId group by PA.AuthorId having count(*)>50) temp1,Author A where temp1.AuthorId = A.AuthorId order by A.name;
 
 --7--
-(select distinct(name) from Author order by name) except (select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId=PA.AuthorId and P.PaperId = PA.PaperId and V.VenueId = P.VenueId and V.type='journals' order by A.name);
+
+select distinct temp.name from ((select distinct(name) from Author order by name) except (select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId=PA.AuthorId and P.PaperId = PA.PaperId and V.VenueId = P.VenueId and V.type='journals' order by A.name)) temp order by temp.name;
 
 --8-- 
-(select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type='journals' order by A.name) except 
-(select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type!='journals' order by A.name);
+select distinct temp.name from ((select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type='journals' order by A.name) except 
+(select distinct(A.name) from Author A,Paper P,PaperByAuthors PA,Venue V where P.PaperId=PA.PaperId and A.AuthorId=PA.AuthorId and P.VenueId=V.VenueId and V.type!='journals' order by A.name)) temp order by temp.name;
 
 --9--
 
-(select distinct(A.name) from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2012 group by A.AuthorId,A.name having count(*)>=2 order by A.name) INTERSECT (select distinct A.name from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2013 group by A.AuthorId,A.name having count(*)>=3 order by A.name) ;
+select distinct temp.name from ((select distinct(A.name) from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2012 group by A.AuthorId,A.name having count(*)>=2 order by A.name) INTERSECT (select distinct A.name from Author A,Paper P, PaperByAuthors PA where PA.AuthorId = A.AuthorId and P.PaperId = PA.PaperId and P.year = 2013 group by A.AuthorId,A.name having count(*)>=3 order by A.name)) temp order by temp.name ;
 
 
 --10--
@@ -83,7 +84,7 @@ select P.Title from Paper P,(select Paper2Id as id,count(*) as cnt from Citation
 
 --18--
 
-(select distinct Title from Paper order by Title) except (select P.Title from Paper P,Citation C where P.PaperId = C.Paper2Id order by Title);
+select temp.title from ((select distinct Title from Paper order by Title) except (select P.Title from Paper P,Citation C where P.PaperId = C.Paper2Id order by Title)) temp order by temp.title;
 
 --19--
 
@@ -96,7 +97,7 @@ select temp.name from
 
 --21--
 
-select V.name from Venue V,papers_in_2009 p1,papers_in_2010 p2,papers_in_2011 p3,papers_in_2012 p4 ,papers_in_2013 p5 where V.VenueId = p1.VenueId and p1.VenueId = p2.VenueId and p2.VenueId = p3.VenueId and p3.VenueId = p4.VenueId and p4.VenueId = p5.VenueId and p1.cnt>=p2.cnt and p2.cnt>=p3.cnt and p3.cnt >=p4.cnt and p4.cnt>=p5.cnt order by V.name;
+select V.name from Venue V,papers_in_2009 p1,papers_in_2010 p2,papers_in_2011 p3,papers_in_2012 p4 ,papers_in_2013 p5 where V.VenueId = p1.VenueId and p1.VenueId = p2.VenueId and p2.VenueId = p3.VenueId and p3.VenueId = p4.VenueId and p4.VenueId = p5.VenueId and p1.cnt<=p2.cnt and p2.cnt<=p3.cnt and p3.cnt <=p4.cnt and p4.cnt<=p5.cnt order by V.name;
 
 --22--
 
@@ -120,18 +121,7 @@ from numpublications np,numcitations nc where num_publications>0 and np.name=nc.
 order by impact_value desc, journal_name asc;
 
 --25--
-
-select A.name,final_res.cnt from (select AuthorId, count(*) as cnt
-from (SELECT PA.AuthorId, PA.PaperId, COUNT(c.Paper1Id) AS citations_count,
-             rank() over (partition by PA.AuthorId, PA.PaperId order by count(c.Paper1Id) desc) as ranking
-      FROM PaperByAuthors PA LEFT OUTER JOIN
-           Citation c
-           ON PA.PaperId = c.Paper2Id
-      GROUP BY PA.AuthorId, PA.PaperId
-     ) t
-where ranking <= citations_count
-group by AuthorId) final_res ,Author A where A.AuthorId = final_res.AuthorId order by final_res.cnt desc,A.name asc;
-
+select name, hindex from (select authorid, max(TheMin) as hindex from (select authorid,count,row_number,(SELECT MIN(Col) FROM (VALUES (count), (row_number)) AS X(Col)) AS TheMin from (SELECT authorid, count, ROW_NUMBER () OVER ( PARTITION BY authorid ORDER BY count desc) FROM (select authorid,count from q_25 natural join paperbyauthors order by authorid,count desc) as x) as y) as z group by authorid) as w natural join author order by hindex desc, name asc;
 
 --CLEANUP--
 
@@ -143,3 +133,4 @@ drop view papers_in_2011;
 drop view papers_in_2012;
 drop view papers_in_2013;
 drop view num_papers_per_author_per_venue;
+drop view q_25;
