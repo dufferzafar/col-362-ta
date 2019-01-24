@@ -115,7 +115,7 @@ with numpublications as
 from Paper join Venue on Paper.VenueId = Venue.VenueId
 where Venue.type='journals' and (Paper.year=2007 or Paper.year=2008)
 group by Venue.name),
-numcitations as (select V.name as name, count(*) as num_citations from Venue V,Citation C,Paper P1,Paper P2 where V.type='journals' and V.venueid= P1.venueid and P1.year=2009 and P1.paperId=C.paper1id and P2.paperid = c.paper2id and (P2.year=2007 or P2.year=2008) group by V.name)
+numcitations as (select V.name as name, count(*) as num_citations from Venue V,Citation C,Paper P1,Paper P2 where V.type='journals' and V.venueid= P2.venueid and P1.year=2009 and P1.paperId=C.paper1id and P2.paperid = c.paper2id and (P2.year=2007 or P2.year=2008) group by V.name)
 select np.name as journal_name, coalesce(0,num_citations*1.0/num_publications) as impact_value
 from numpublications np left join numcitations nc on np.name=nc.name where num_publications>0 
 order by impact_value desc, journal_name asc;
