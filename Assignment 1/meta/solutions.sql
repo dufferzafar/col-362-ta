@@ -23,7 +23,7 @@ select avg(cnt) from authors_per_paper;
 
 --3--
 
-select Title from Paper P,authors_per_paper temp where temp.cnt>20 and P.PaperId=temp.PaperId order by Title;
+select distinct Title from Paper P,authors_per_paper temp where temp.cnt>20 and P.PaperId=temp.PaperId order by Title;
 
 --4-- 
 
@@ -59,7 +59,7 @@ select temp.name from (select A.name,count(PA.PaperId) as paper_count from Autho
 select distinct(A.name) from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='amc' group by PA.AuthorId,A.name having count(*)>3 order by A.name asc;
 
 --12--
-(select distinct A.name from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='ieicet' group by PA.AuthorId,A.name having count(*)>10 order by A.name asc) except (select distinct A.name from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='tcs' group by PA.AuthorId,A.name);
+select t.name from ((select distinct A.name from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='ieicet' group by PA.AuthorId,A.name having count(*)>=10 ) except (select distinct A.name from Author A,Paper P,PaperByAuthors PA, Venue V where A.AuthorId = PA.AuthorId and P.PaperId = PA.PaperId and P.VenueId = V.VenueId and V.type='journals' and V.name='tcs' group by PA.AuthorId,A.name)) t order by t.name asc;
 
 --13--
 
@@ -84,7 +84,7 @@ select P.Title from Paper P,(select Paper2Id as id,count(*) as cnt from Citation
 
 --18--
 
-select temp.title from ((select distinct Title from Paper order by Title) except (select P.Title from Paper P,Citation C where P.PaperId = C.Paper2Id order by Title)) temp order by temp.title;
+select  distinct title from paper where paperid not in (select paper2id from citation) order by title;
 
 --19--
 
@@ -116,8 +116,8 @@ from Paper join Venue on Paper.VenueId = Venue.VenueId
 where Venue.type='journals' and (Paper.year=2007 or Paper.year=2008)
 group by Venue.name),
 numcitations as (select V.name as name, count(*) as num_citations from Venue V,Citation C,Paper P1,Paper P2 where V.type='journals' and V.venueid= P1.venueid and P1.year=2009 and P1.paperId=C.paper1id and P2.paperid = c.paper2id and (P2.year=2007 or P2.year=2008) group by V.name)
-select np.name as journal_name, num_citations*1.0/num_publications as impact_value
-from numpublications np,numcitations nc where num_publications>0 and np.name=nc.name
+select np.name as journal_name, coalesce(0,num_citations*1.0/num_publications) as impact_value
+from numpublications np left join numcitations nc on np.name=nc.name where num_publications>0 
 order by impact_value desc, journal_name asc;
 
 --25--
