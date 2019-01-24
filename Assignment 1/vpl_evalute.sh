@@ -43,7 +43,7 @@ tar --overwrite -xf model.tar
 
 # Match all parts
 for part in $(seq 1 25); do
-    diff -qB "part-$part.out" "part-$part.model" > /dev/null 2>&1
+    diff -qwB "part-$part.out" "part-$part.model" > /dev/null 2>&1
     error=$?
     if [ $error -eq 0 ]; then
         grade=$((grade+4))
