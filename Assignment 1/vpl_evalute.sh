@@ -66,7 +66,7 @@ for part in $(seq 1 25); do
         diff -qwB "part-$part.out" "part-$part.old.model" > /dev/null 2>&1
         error2=$?
 
-        if [ $error1 -eq 0 || $error2 -eq 0 ]; then
+        if [ $error1 -eq 0 -o $error2 -eq 0 ]; then
             grade=$((grade+2))
         else
             echo "Part $part is wrong."
