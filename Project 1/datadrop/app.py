@@ -52,17 +52,8 @@ def hello():
         return make_response(("Couldn't write file to disk.", 500))
 
     total_chunks = int(request.form['dztotalchunkcount'])
-
     if current_chunk + 1 == total_chunks:
-        # This was the last chunk, the file should be complete and the size we expect
-        if os.path.getsize(save_path) != int(request.form['dztotalfilesize']):
-            log.error(f"File {file.filename} was completed, but has a size mismatch.")
-            return make_response(('Size mismatch', 500))
         else:
-            log.info(f'File {file.filename} has been uploaded successfully.')
-    else:
-        log.debug(f'Chunk {current_chunk + 1} of {total_chunks} '
-                  f'for file {file.filename} complete.')
 
     return make_response(("Chunk upload successful", 200))
 
