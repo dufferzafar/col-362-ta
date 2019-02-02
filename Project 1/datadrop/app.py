@@ -58,12 +58,29 @@ def hello():
         log.exception(err)
         return make_response((err, 500))
 
+    # Finished writing chunks?
     total_chunks = int(request.form['dztotalchunkcount'])
     if current_chunk + 1 == total_chunks:
+        ok = pg_load(user, file_path)
+        if ok:
+            # TODO: Return data to be displayed in output div
+            pass
         else:
+            # TODO: Return data to be displayed in error div
+            pass
+
+        # TODO: Delete file 
 
     return make_response(("Chunk upload successful", 200))
 
+
+# TODO: Implement this!
+def pg_load(user, dump_path):
+    # Decide which host to use based on the user
+    # Run the right pg_restore command using subprocess
+    # Return data to be displayed in output / error div
+    pass
+    
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
