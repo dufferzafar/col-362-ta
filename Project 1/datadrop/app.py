@@ -42,17 +42,21 @@ def hello():
 
     # If the file already exists it's ok if we are appending to it,
     # but not if it's new file that would overwrite the existing one
-    if os.path.exists(save_path) and current_chunk == 0:
-        # TODO: This need not be an error?
-        return make_response(('File already exists.', 400))
+    if os.path.exists(file_path) and current_chunk == 0:
+        try:
+            os.remove(file_path)
+        except OSError:
+            return make_response(("File already exists and couldn't be removed.", 400))
 
+    # Write chunk to file
     try:
-        with open(save_path, 'ab') as f:
+        with open(file_path, 'ab') as f:
             f.seek(int(request.form['dzchunkbyteoffset']))
             f.write(file.stream.read())
     except OSError:
-        log.exception('Could not write to file.')
-        return make_response(("Couldn't write file to disk.", 500))
+        err = "Couldn't write to file."
+        log.exception(err)
+        return make_response((err, 500))
 
     total_chunks = int(request.form['dztotalchunkcount'])
     if current_chunk + 1 == total_chunks:
