@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS: Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+
+    <!-- CSS: Prism Syntax Highlighter -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css'/>
+
+    <title>COL 362/632 - Project 1 - Postgres Log Viewer</title>
+
+    <style>
+        .container {
+            width: auto;
+            padding: 0 15px;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column h-100"  >
+
+    <!-- Begin page content -->
+    <main role="main">
+        <div class="container">
+            <h1 class="mt-5 ">Queries executed by: Group {{ group_num }}</h1>
+            <p class="lead">Showing the last 25 queries executed.</p>
+
+            <table class="mt-5 table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 25%;">Time</th>
+                        <th scope="col">SQL Query</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td scope="row">{{ row[0] }}</td>
+                        <td scope="row">
+                            {% if row[1].startswith("statement:") %}
+                                <pre class="line-numbers"><code class="language-sql">{{row[1][11:]}}</code></pre>
+                            {% else %}
+                                {{row[1]}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+    <!-- JS: Prism Syntax Highlighter -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-sql.min.js'></script>
+
+</body>
+
+</html>

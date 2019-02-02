@@ -30,3 +30,7 @@ A script to send email from IIT D account to lots of students.
 
 * Someone can try to bruteforce the HTTP basic auth of other users
     - [Rate limit via Flask?](https://flask-limiter.readthedocs.io/en/stable/)
+
+* `logview`
+    - Currently, it can only display the log of the host it runs on
+    - But since students will connect to different hosts, how will it display log from them?
