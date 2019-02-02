@@ -1,6 +1,7 @@
 
 # Assignment 1
 
+Password of all machines: `vpl-362`
 
 ## Server Work
 

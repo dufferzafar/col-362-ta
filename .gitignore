@@ -2,6 +2,13 @@
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python
 
+Assignment 1/model/
+Assignment 1/model-old/
+Assignment 1/model-old-data/
+Assignment 1/data/
+
+Project 1/logview/*.csv
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
