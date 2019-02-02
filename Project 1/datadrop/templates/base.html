@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" 
+     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css"/>
+
+    <link rel="stylesheet" 
+     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/basic.min.css"/>
+
+    <script type="application/javascript" 
+     src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.js">
+    </script>
+
+    <title>COL 362/632 - Project 1 - Data Upload</title>
+
+    <style>
+        body {
+            background-color: #646C7F;
+        }
+
+        #dropper {
+            width: 320px;
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body>
+
+<form method="POST" action='/upload' class="dropzone dz-clickable" 
+      id="dropper" enctype="multipart/form-data">
+
+    <div class="dz-message needsclick">
+        Drop files here or click to upload.
+    </div>
+</form>
+
+<script type="application/javascript">
+    Dropzone.options.dropper = {
+        url: '/upload',
+        timeout: 50000, // ms
+        
+        maxFilesize: 1025, // MB
+        
+        chunking: true,
+        forceChunking: true,
+        chunkSize: 1000000, // bytes
+        // retryChunks: true, // This will require changes in Python code as well?
+
+        maxFiles: 1,
+
+        paramName: 'file'
+    }
+</script>
+</body>
+</html>
