@@ -22,15 +22,15 @@ def check_creds(user, passw):
 # Use our method instead of the built-in one
 basic_auth.check_credentials = check_creds
 
-@app.route('/')
+
+@app.route('/', methods=['GET', 'POST'])
 @basic_auth.required
 def hello():
-    return render_template('base.html')
+    if request.method == 'GET':
+        return render_template('base.html')
 
+    # request.method == 'POST'
 
-# TODO: Use / route to POST as well?
-@app.route('/upload', methods=['POST'])
-def upload():
     file = request.files['file']
 
     # TODO: Use a different data root than /tmp?

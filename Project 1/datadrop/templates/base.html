@@ -54,7 +54,7 @@
             <!-- <p> Add some text here too? </p> -->
 
             <!-- The DropZone Form -->
-            <form method="POST" action="/upload" class="dropzone dz-clickable" id="dropper"
+            <form method="POST" action="/" class="dropzone dz-clickable" id="dropper"
                 enctype="multipart/form-data">
 
                 <div class="dz-message needsclick">
@@ -88,7 +88,7 @@
 
     <script type="application/javascript">
         Dropzone.options.dropper = {
-            url: "/upload",
+            url: "/",
             timeout: 50000, // ms
 
             maxFilesize: 1025, // MB
