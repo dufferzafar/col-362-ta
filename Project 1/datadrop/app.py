@@ -32,10 +32,13 @@ def hello():
     # request.method == 'POST'
 
     file = request.files['file']
+    user = request.authorization.username
 
     # TODO: Use a different data root than /tmp?
-    save_path = os.path.join("/tmp", secure_filename(file.filename))
+    # TODO: Get unique file name? Benefits?
+    #       Keep in mind that this function is called multiple times for the same file!
     current_chunk = int(request.form['dzchunkindex'])
+    file_path = os.path.join("/tmp", user + "__" + secure_filename(file.filename))
 
     # If the file already exists it's ok if we are appending to it,
     # but not if it's new file that would overwrite the existing one
