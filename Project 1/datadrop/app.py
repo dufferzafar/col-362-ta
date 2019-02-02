@@ -2,19 +2,29 @@ import os
 import logging
 
 from flask import Flask, render_template, request, make_response
+from flask_basicauth import BasicAuth
 from werkzeug.utils import secure_filename
+
+from credentials import CREDENTIALS
 
 log = logging.getLogger('datadrop')
 # TODO: Setup a log output?
 
 
 app = Flask(__name__)
+basic_auth = BasicAuth(app)
 
 
-# TODO: Add Basic Auth
+def check_creds(user, passw):
+    """ Lookup credentials from file. """
+    return passw == CREDENTIALS.get(user)
+    
 
+# Use our method instead of the built-in one
+basic_auth.check_credentials = check_creds
 
 @app.route('/')
+@basic_auth.required
 def hello():
     return render_template('base.html')
 
