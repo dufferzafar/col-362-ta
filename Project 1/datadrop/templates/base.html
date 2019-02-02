@@ -1,60 +1,108 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" 
-     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css"/>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" 
-     href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/basic.min.css"/>
+    <!-- CSS: Bootstrap -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
 
-    <script type="application/javascript" 
-     src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.js">
-    </script>
+    <!-- CSS: Dropzone -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/basic.min.css" />
 
-    <title>COL 362/632 - Project 1 - Data Upload</title>
+    <title>COL 362/632 - Project 1 - Data Dump Upload</title>
 
     <style>
-        body {
+        /* body {
             background-color: #646C7F;
-        }
+        } */
 
         #dropper {
-            width: 320px;
             border: 2px dashed #0087F7;
             border-radius: 5px;
             background: white;
             cursor: pointer;
-            min-height: 150px;
+            margin-top: 20%;
         }
+
+        .container {
+            width: auto;
+            max-width: 680px;
+            padding: 0 15px;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+        }
+
     </style>
 </head>
-<body>
 
-<form method="POST" action='/upload' class="dropzone dz-clickable" 
-      id="dropper" enctype="multipart/form-data">
+<body class="d-flex flex-column h-100"  >
 
-    <div class="dz-message needsclick">
-        Drop files here or click to upload.
-    </div>
-</form>
+    <!-- Begin page content -->
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5 ">Project 1 - Data Dump Upload</h1>
 
-<script type="application/javascript">
-    Dropzone.options.dropper = {
-        url: '/upload',
-        timeout: 50000, // ms
-        
-        maxFilesize: 1025, // MB
-        
-        chunking: true,
-        forceChunking: true,
-        chunkSize: 1000000, // bytes
-        // retryChunks: true, // This will require changes in Python code as well?
+            <!-- <p class="lead"> Big text. </p> -->
+            <!-- <p> Add some text here too? </p> -->
 
-        maxFiles: 1,
+            <!-- The DropZone Form -->
+            <form method="POST" action="/upload" class="dropzone dz-clickable" id="dropper"
+                enctype="multipart/form-data">
 
-        paramName: 'file'
-    }
-</script>
+                <div class="dz-message needsclick">
+                    Drop your dump file here or click to upload.
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <span class="text-muted">
+                Built by 
+                <a href="https://github.com/dufferZafar" target="_blank">@dufferZafar</a> and 
+                <a href="https://github.com/hthuwal" target="_blank">@hthuwal</a> 
+                using 
+                <a href="http://flask.pocoo.org" target="_blank">Flask</a>, 
+                <a href="https://dropzonejs.com" target="_blank">Dropzone</a> & 
+                <a href="https://code.visualstudio.com" target="_blank">VSCode</a>.
+            </span>
+        </div>
+    </footer>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+    <!-- Dropzone JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.js"> </script>
+
+    <script type="application/javascript">
+        Dropzone.options.dropper = {
+            url: "/upload",
+            timeout: 50000, // ms
+
+            maxFilesize: 1025, // MB
+
+            chunking: true,
+            forceChunking: true,
+            chunkSize: 1000000, // bytes
+            // retryChunks: true, // This will require changes in Python code as well?
+
+            maxFiles: 1,
+
+            paramName: "file"
+        }
+    </script>
 </body>
+
 </html>
