@@ -1,3 +1,25 @@
+SENDER = {
+    "email": "",
+    "uname": "",
+    "pswd": "",
+}
+
+SMTP_SERVER = ""
+
+RECIPIENTS_FILE = "massmailer/recipients.csv"
+
+EMAIL_TEMPLATE = """
+Dear student,
+
+Use the following username and password to upload your database.
+
+Uername: {uname}
+Password: {pswd}
+
+Regards,
+Shadab and Harish
+"""
+
 CREDENTIALS = {
     # Admin account
     "group_0": "This is a long passphrase that no one can guess.",

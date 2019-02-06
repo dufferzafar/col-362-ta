@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, make_response
 from flask_basicauth import BasicAuth
 from werkzeug.utils import secure_filename
 
-from credentials import CREDENTIALS
+from config import CREDENTIALS
 
 # TODO: Setup log output?
 log = logging.getLogger('datadrop')

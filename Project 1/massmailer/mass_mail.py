@@ -1,12 +1,8 @@
 import csv
 import smtplib
 import sys
+
 from config import *
-
-# Dirty Hack
-sys.path.append("../datadrop")
-from credentials import CREDENTIALS
-
 
 SUBJECT = "DBMS Project 1 Credentials"
 
