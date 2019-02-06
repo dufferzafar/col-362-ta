@@ -11,9 +11,13 @@ Columns displayed in HTML table: Time, Message
 import os
 import sys
 import csv
+import socket
+
 from collections import deque
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
+
+from config import SERVERS
 
 app = Flask(__name__)
 
@@ -34,7 +38,22 @@ PG_LOG_COLUMNS = [
 
 MAX_ROWS = 25
 
-# TODO: Do we need basic_auth here as well?
+
+def get_IP():
+    """
+    Returns primary IP address
+
+    https://stackoverflow.com/a/28950776
+    """
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 @app.route("/")
 def root():
@@ -42,6 +61,15 @@ def root():
 
 @app.route("/group/<int:group_num>")
 def index(group_num):
+
+    # Each group is assigned to a specific server
+    # So that the load is equally balanced
+    # and we only have to read log files present locally on disk
+    my_IP = get_IP()
+    group_IP = list(SERVERS.keys())[int(group_num) % 3]
+    if my_IP != group_IP:
+        return redirect("http://%s:%d" % (group_IP, 5000))
+
     rows = deque()
 
     with open(PG_LOG, newline='') as f:
