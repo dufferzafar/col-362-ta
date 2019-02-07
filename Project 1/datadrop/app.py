@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, make_response
 from flask_basicauth import BasicAuth
 from werkzeug.utils import secure_filename
 
+import sys
+sys.path.append("..")
 from config import CREDENTIALS
 
 # TODO: Setup log output?

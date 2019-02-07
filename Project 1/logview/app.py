@@ -17,6 +17,8 @@ from collections import deque
 
 from flask import Flask, render_template, redirect
 
+import sys
+sys.path.append("..")
 from config import SERVERS
 
 app = Flask(__name__)
@@ -55,9 +57,11 @@ def get_IP():
         s.close()
     return IP
 
+
 @app.route("/")
 def root():
     return r"Use the /group/{group_number} URL."
+
 
 @app.route("/group/<int:group_num>")
 def index(group_num):
@@ -80,7 +84,7 @@ def index(group_num):
             #     continue
 
             rows.append([row[0], row[13]])
-            
+
             if len(rows) > MAX_ROWS:
                 rows.popleft()
 
