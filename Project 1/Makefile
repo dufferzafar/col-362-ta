@@ -5,7 +5,7 @@ ping:
 	@./run-all uptime
 
 ls:
-	@./run-all ls -la "~"
+	@./run-all ls "~"
 
 # Reboot machines
 restart-all:
@@ -13,3 +13,8 @@ restart-all:
 
 ports:
 	@./run-all -sudo netstat -ntulp
+
+
+# @cut -f1 ./hosts | xargs -I{} rsync --filter='dir-merge,-n /.gitignore' -av . {}:~/proj1/
+push-src:
+	@cut -f1 ./hosts | xargs -I{} rsync -arv --exclude=__pycache__ . {}:~/proj1/
