@@ -66,7 +66,7 @@ def index(group_num):
     # So that the load is equally balanced
     # and we only have to read log files present locally on disk
     my_IP = get_IP()
-    group_IP = list(SERVERS.keys())[int(group_num) % 3]
+    group_IP = list(SERVERS.values())[int(group_num) % 3]
     if my_IP != group_IP:
         return redirect("http://%s:%d" % (group_IP, 5000))
 
