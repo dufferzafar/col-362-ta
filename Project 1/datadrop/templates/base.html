@@ -61,6 +61,16 @@
                     Drop your dump file here or click to upload.
                 </div>
             </form>
+
+            <div class="alert alert-danger" id="error" style="display: none;">
+                <strong>Error Occurred:</strong>
+                <p id="errmsg"></p>
+            </div>
+
+            <div class="alert alert-success" id="success" style="display: none;">
+                <strong>Upload Successful!</strong>
+            </div>
+
         </div>
     </main>
 
@@ -97,6 +107,17 @@
 
             paramName: "file"
         }
+
+        var mydropzone = new Dropzone("#dropper");
+
+        mydropzone.on("error", function (obj, msg, xhr) {
+            document.querySelector("#error").style.display = "block";
+            document.querySelector("#errmsg").textContent = msg;
+        });
+
+        mydropzone.on("success", function (obj) {
+            document.querySelector("#success").style.display = "block";
+        });
     </script>
 </body>
 
