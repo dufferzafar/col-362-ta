@@ -7,6 +7,7 @@ from config import SERVERS, CREDENTIALS
 QUERY = """
     DROP USER IF EXISTS {group};
     CREATE USER {group} WITH PASSWORD \'{pswd}\';
+    ALTER USER {group} CREATEDB;
     """
 
 
