@@ -33,6 +33,7 @@ Shadab and Harish
 
 CREDENTIALS = {
     # Admin account
+    "test_0": "test",
     "group_0": "This is a long passphrase that no one can guess.",
 
     # Passwords for 40 groups of students
