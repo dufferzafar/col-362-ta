@@ -1,14 +1,16 @@
 import os
+import psycopg2
 import shutil
 import logging
 
 from flask import Flask, render_template, request, make_response
 from flask_basicauth import BasicAuth
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from werkzeug.utils import secure_filename
 
 import sys
 sys.path.append("..")
-from config import CREDENTIALS
+from config import CREDENTIALS, SERVERS
 
 # TODO: Setup log output?
 log = logging.getLogger('datadrop')
@@ -70,25 +72,70 @@ def hello():
     # Finished writing chunks?
     total_chunks = int(request.form['dztotalchunkcount'])
     if current_chunk + 1 == total_chunks:
-        ok = pg_load(user, file_path)
-        if ok:
-            # TODO: Return data to be displayed in output div
-            pass
+        status = pg_load(user, request.authorization.password, file_path)
+        if status["success"]:
+            print(status)
+            make_response((status["msg"], 200))
         else:
-            # TODO: Return data to be displayed in error div
-            pass
-
-        # TODO: Delete file
+            print(status)
+            make_response((status["msg"], 400))
 
     return make_response(("Chunk upload successful", 200))
 
 
-# TODO: Implement this!
-def pg_load(user, dump_path):
-    # Decide which host to use based on the user
-    # Run the right pg_restore command using subprocess
-    # Return data to be displayed in output / error div
-    pass
+def connect(ip, user, pswd, dbname="postgres"):
+    print("Connecting to %s:5432" % (ip))
+    try:
+        conn = psycopg2.connect(
+            user=user,
+            host=ip,
+            port="5432",
+            password=pswd,
+            dbname=dbname,
+        )
+        return conn
+
+    except psycopg2.Error as e:
+        print("Error connecting to postgres server\n %s" % (str(e)))
+        return None
+
+
+def cleanup(conn, group):
+    q1 = "DROP DATABASE IF EXISTS {group};"
+    q2 = "CREATE DATABASE {group};"
+    conn.autocommit = True
+    conn.cursor().execute(q1.format(group=group))
+    conn.cursor().execute(q2.format(group=group))
+    conn.commit()
+
+
+def pg_load(user, pswd, dump_path):
+    group_no = int(user.split("_")[-1]) % 3 + 1
+    key = "vpl" + str(group_no)
+    ip = SERVERS[key]
+
+    print("Performing Cleanup before Loading...")
+    conn = connect(ip, user, pswd)
+    cleanup(conn, user)
+    conn.close()
+
+    print("Loading Database")
+    conn = connect(ip, user, pswd, dbname=user)
+    try:
+        conn.cursor().execute(open(dump_path, "r").read())
+        msg = "Dump Loaded successfully"
+        success = True
+        conn.commit()
+    except psycopg2.Error as e:
+        msg = "Error Occured while loading database: \n\n %s" % (e.pgerror)
+        success = False
+    finally:
+        conn.close()
+
+    return {
+        "success": success,
+        "msg": msg
+    }
 
 
 if __name__ == '__main__':
