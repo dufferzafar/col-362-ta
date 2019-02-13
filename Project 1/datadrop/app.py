@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, make_response
 from flask_basicauth import BasicAuth
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from werkzeug.utils import secure_filename
+import subprocess
 
 import sys
 sys.path.append("..")
@@ -120,17 +121,15 @@ def pg_load(user, pswd, dump_path):
     conn.close()
 
     print("Loading Database")
-    conn = connect(ip, user, pswd, dbname=user)
+    # conn = connect(ip, user, pswd, dbname=user)
     try:
-        conn.cursor().execute(open(dump_path, "r").read())
+        cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
+        subprocess.check_output(cmd, shell=True)
         msg = "Dump Loaded successfully"
         success = True
-        conn.commit()
-    except psycopg2.Error as e:
-        msg = "Error Occured while loading database: \n\n %s" % (e.pgerror)
+    except Exception as e:
+        msg = "Error Occured while loading database: \n\n %s" % (e)
         success = False
-    finally:
-        conn.close()
 
     return {
         "success": success,
