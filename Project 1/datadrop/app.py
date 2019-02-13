@@ -31,7 +31,7 @@ basic_auth.check_credentials = check_creds
 
 @app.route('/', methods=['GET', 'POST'])
 @basic_auth.required
-def hello():
+def index():
     if request.method == 'GET':
         return render_template('base.html')
 
@@ -73,13 +73,17 @@ def hello():
     # Finished writing chunks?
     total_chunks = int(request.form['dztotalchunkcount'])
     if current_chunk + 1 == total_chunks:
-        status = pg_load(user, request.authorization.password, file_path)
-        if status["success"]:
-            print(status)
-            make_response((status["msg"], 200))
+        msg = pg_load(user, request.authorization.password, file_path)
+        
+        print(msg)
+
+        # Crude way of detecting that an error has occurred
+        if b"ERROR:" in msg:
+            print("ERRORR OCCURRED!")
+            return make_response((msg, 400))
         else:
-            print(status)
-            make_response((status["msg"], 400))
+            print("No Error!")
+            return make_response((msg, 200))
 
     return make_response(("Chunk upload successful", 200))
 
@@ -121,20 +125,10 @@ def pg_load(user, pswd, dump_path):
     conn.close()
 
     print("Loading Database")
-    # conn = connect(ip, user, pswd, dbname=user)
-    try:
-        cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
-        subprocess.check_output(cmd, shell=True)
-        msg = "Dump Loaded successfully"
-        success = True
-    except Exception as e:
-        msg = "Error Occured while loading database: \n\n %s" % (e)
-        success = False
+    cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
+    msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
 
-    return {
-        "success": success,
-        "msg": msg
-    }
+    return msg
 
 
 if __name__ == '__main__':
