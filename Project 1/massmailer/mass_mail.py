@@ -5,6 +5,7 @@ import sys
 import sys
 sys.path.append("..")
 from config import *
+from utils import group_IP
 from email.mime.text import MIMEText
 
 
@@ -41,9 +42,22 @@ if __name__ == "__main__":
 
             if group not in CREDENTIALS:
                 print("Credentials for {group} does not exist.".format(group=group))
+
+            # elif group == "group_0":
+            else:
                 tolist = [entry_to_kerberos(en) + MAIL_SERVER for en in entry_numbers]
 
-                body = EMAIL_TEMPLATE.format(uname=group, pswd=CREDENTIALS[group], members=", ".join(names), url=PORTAL_URL)
+                host = group_IP(group)
+                portal_url = host + ":5000"
+
+                body = EMAIL_TEMPLATE.format(
+                    uname=group,
+                    pswd=CREDENTIALS[group],
+                    members=", ".join(names),
+                    url=portal_url,
+                    host=host
+                )
+
                 msg = MIMEText(body)
                 msg['Subject'] = SUBJECT
                 msg['From'] = SENDER['email']

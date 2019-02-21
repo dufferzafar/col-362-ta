@@ -5,7 +5,6 @@ SERVERS = {
     "vpl3": "10.17.51.19",
 }
 
-PORTAL_URL = "nothing"
 MAIL_SERVER = "@iitd.ac.in"
 
 ###########################################################################
@@ -30,8 +29,14 @@ Use the following username and password to upload your database to the portal.
 Uername: {uname}
 Password: {pswd}
 
-Portal's URL: {url}
+Portal's URL: http://{url}/
 (will only work when connected to IIT Delhi's network)
+
+Use the aforementioned credentials to connect to this DB:
+
+Host: {host}
+Port: 5432
+Database Name: {uname}
 
 Regards,
 Shadab & Harish
