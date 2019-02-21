@@ -1,13 +1,19 @@
 
-# Created by https://www.gitignore.io/api/python
-# Edit at https://www.gitignore.io/?templates=python
+## vscode
 
+.vscode
+
+## Ignore Assignment specific stuff
 Assignment 1/model/
 Assignment 1/model-old/
 Assignment 1/model-old-data/
 Assignment 1/data/
-
+Assignment 1/model_solutions
+Assignment 1/*.tar
 Project 1/logview/*.csv
+
+# Created by https://www.gitignore.io/api/python
+# Edit at https://www.gitignore.io/?templates=python
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
