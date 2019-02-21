@@ -2,6 +2,8 @@ import csv
 import smtplib
 import sys
 
+import sys
+sys.path.append("..")
 from config import *
 
 SUBJECT = "DBMS Project 1 Credentials"
