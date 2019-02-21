@@ -44,7 +44,7 @@
                         <td scope="row">{{ row[0] }}</td>
                         <td scope="row">
                             {% if row[1].startswith("statement:") %}
-                                <pre class="line-numbers"><code class="language-sql">{{row[1][11:]}}</code></pre>
+                                <pre class="line-numbers" style="max-width: 800px;"><code class="language-sql">{{row[1][11:]}}</code></pre>
                             {% else %}
                                 {{row[1]}}
                             {% endif %}
