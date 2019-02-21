@@ -1,2 +1,35 @@
-group_x,mcs172074@cse.iitd.ac.in
-group_1,mcs172074@cse.iitd.ac.in,mcs172076@cse.iitd.ac.in
+Group ID , Student Name 1            , Entry Number , Student Name 2         , Entry Number , Student Name 3             , Entry Number
+group_0  , Harish Thuwal             , 2017MCS2074  , Shadab Zafar           , 2017MCS2076  ,                            ,
+group_1  , Mohit Choudhary           , 2013CS10237  ,                        ,              ,                            ,
+group_2  , Bikash Gupta              , 2014CH70163  , Abhishek Mishra        , 2012MT50584  ,                            ,
+group_3  , Pulkit Srivastava         , 2015CH10122  , Akshay Kumar Pansari   , 2015ME20713  , Vishesh Goyal              , 2015CH10145
+group_4  , Shobhit Gupta             , 2015CS10259  , Paras Gupta            , 2015ME10354  , Sanket Sanjay Dhakate      , 2015CS10255
+group_5  , Manu Mitraan              , 2015CS10236  , Om Patel               , 2015CS10241  ,                            ,
+group_6  , Shubham Yadav             , 2015CS50294  , Harsimrat Singh        , 2015CS50284  , Vipin Rao                  , 2015CS10267
+group_7  , Makkunda Sharma           , 2015CS50459  , Anant Chhajwani        , 2015CS50281  , Sarthak Mishra             , 2015CS10256
+group_8  , Abhimanyu Swami           , 2015MT10583  , Barinderpreet Singh    , 2015MT10594  , Amit Meena                 , 2015MT10588
+group_9  , Sankara Dinesh            , 2015PH10838  , Sagare Chetan          , 2015PH10822  , Sandeep Kumar              , 2015MT60373
+group_10 , Yashti Agrawal            , 2015PH10840  , Shivanshu Verma        , 2015CH70186  , Hire Vikram Umaji          , 2015CS10227
+group_11 , Kumar Shubham             , 2016BB10052  , Ravi Singh             , 2016EE10467  , Nitin Yadav                , 2016EE10050
+group_12 , Shivam Sachdeva           , 2016CE10856  , Harsh Singla           , 2016CE10226  , Samir Gupta                , 2016TT10864
+group_13 , Akshat Khare              , 2016CS10315  , Divyanshu Saxena       , 2016CS10316  , Srijan Sinha               , 2016CS10322
+group_14 , V Pavan Sai               , 2016CS10318  , A Sai Teja             , 2016CS10351  , Harsha Vardhan             , 2016CS10378
+group_15 , Harshit Goel              , 2016CS10319  , Kashish Jain           , 2016EE10434  , Akanshu Gupta              , 2016EE10418
+group_16 , Saikiran Anugu            , 2016CS10325  , Jayanth Ravi           , 2016CS10324  , V Sai Rohan                , 2016CS10365
+group_17 , Golla Venkata Sai Dheeraj , 2016CS10349  , Harshith Chandra Danam , 2016CS10364  , Hari chandan               , 2016CS10320
+group_18 , Abhinash Kumar            , 2016CS10357  , Shubham Jain           , 2016EE30512  , Prasanth Kurmapu           , 2016CS10358
+group_19 , Aniket Kumar              , 2016CS50398  , Sunil Kumar            , 2016CS10314  , Pratyush Pandey            , 2017EE10938
+group_20 , Chinmaya Singh            , 2016EE30220  , Adarsh Agrawal         , 2016CE10213  , Vivek Singal               , 2016EE10421
+group_21 , Salil Chandra             , 2016EE30246  , Manas Joshi            , 2015ME10108  ,                            ,
+group_22 , Anmol Ojha                , 2016PH10569  , Gobind Singh           , 2016PH10567  ,                            ,
+group_23 , Sumit Singh               , 2016PH10575  , Prashant Singh Chandel , 2016PH10566  , Prathamesh Pradeep Divekar , 2016PH10560
+group_24 , Rohan jain                , 2016TT10861  , K Sai Kumar Reddy      , 2016CS10330  , CH ROHAN RAJU              , 2014CS10216
+group_25 , Vishwajeet Agrawal        , 2017CS10790  , Rahul Jain             , 2017EE10476  , Adarsh Aman                , 2017CS50402
+group_26 , Ankit Kumar               , 2017MT10727  , Manthan Kabra          , 2017MT10735  , Naman Jhunjhunwala         , 2017MT10737
+group_27 , Mrigank Raman             , 2017MT10736  , Ojal Kumar             , 2017MT10741  ,                            ,
+group_28 , Nikhil Kapoor             , 2017MT10739  , Lokesh Raj             , 2017MT10734  ,                            ,
+group_29 , Misha Mehra               , 2018MCS2020  , Garima                 , 2018MCS2017  ,                            ,
+group_30 , Prashant Kumar            , 2018MCS2021  , Phaneesh Barwaria      , 2018MCS2014  , Nitish Raj                 , 2018MCS2140
+group_31 , Suraj S                   , 2018MCS2024  , Saurabh Godse          , 2018MCS2019  , Sriraam S V                , 2018MCS2092
+group_32 , Konark Verma              , 2018MCS2025  , Jasbir Singh           , 2018MCS2007  , Aditya Kumar               , 2018MCS2013
+group_33 , Hariom Ahlawat            , 2018MCS2093  , Rohit Sharma           , 2018MCS2095  , Varun Pareek               , 2018MCS2095
