@@ -1,20 +1,29 @@
 import os
+import sys
 import psycopg2
 import shutil
 import logging
-
-from flask import Flask, render_template, request, make_response
-from flask_basicauth import BasicAuth
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from werkzeug.utils import secure_filename
 import subprocess
 
-import sys
+from flask import Flask, render_template, request, make_response
+from flask.logging import default_handler
+from flask_basicauth import BasicAuth
+
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from werkzeug.utils import secure_filename
+
 sys.path.append("..")
 from config import CREDENTIALS, SERVERS
 
-# TODO: Setup log output?
+# Setup Logging
 log = logging.getLogger('datadrop')
+log.setLevel(logging.DEBUG)
+fh = logging.FileHandler("Datadrop.log", mode="w")
+fh.setFormatter(logging.Formatter("%(asctime)s : %(levelname)s : %(funcName)10s() : %(message)s"))
+log.addHandler(fh)
+
+flask_log = logging.getLogger("flask")
+flask_log.addHandler(default_handler)
 
 app = Flask(__name__)
 basic_auth = BasicAuth(app)
@@ -34,8 +43,6 @@ basic_auth.check_credentials = check_creds
 def index():
     if request.method == 'GET':
         return render_template('base.html')
-
-    # request.method == 'POST'
 
     file = request.files['file']
     user = request.authorization.username
@@ -75,21 +82,19 @@ def index():
     if current_chunk + 1 == total_chunks:
         msg = pg_load(user, request.authorization.password, file_path)
         
-        print(msg)
-
         # Crude way of detecting that an error has occurred
         if b"ERROR:" in msg:
-            print("ERRORR OCCURRED!")
+            log.error("%s - PG SQL returned: %s", user, msg.decode("ascii", "ignore"))
             return make_response((msg, 400))
         else:
-            print("No Error!")
+            log.debug("%s - Data upload successful", user)
             return make_response((msg, 200))
 
     return make_response(("Chunk upload successful", 200))
 
 
 def connect(ip, user, pswd, dbname="postgres"):
-    print("Connecting to %s:5432" % (ip))
+    log.debug("%s - Connecting to %s:5432" % (user, ip))
     try:
         conn = psycopg2.connect(
             user=user,
@@ -101,7 +106,7 @@ def connect(ip, user, pswd, dbname="postgres"):
         return conn
 
     except psycopg2.Error as e:
-        print("Error connecting to postgres server\n %s" % (str(e)))
+        log.debug("%s - Error connecting to postgres server\n %s" % (user, str(e)))
         return None
 
 
@@ -119,12 +124,13 @@ def pg_load(user, pswd, dump_path):
     key = "vpl" + str(group_no)
     ip = SERVERS[key]
 
-    print("Performing Cleanup before Loading...")
+    log.debug("%s - Performing Cleanup before loading", user)
     conn = connect(ip, user, pswd)
+    # BUG: What if this fails
     cleanup(conn, user)
     conn.close()
 
-    print("Loading Database")
+    log.debug("%s - Loading database", user)
     cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
     msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
 
