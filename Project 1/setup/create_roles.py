@@ -3,11 +3,13 @@ import sys
 
 sys.path.append("..")
 from config import SERVERS, CREDENTIALS
+from utils import group_IP
 
 QUERY = """
+    REVOKE USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public FROM {group};
+    REVOKE SELECT ON ALL TABLES IN SCHEMA public FROM {group};
     DROP USER IF EXISTS {group};
     CREATE USER {group} WITH PASSWORD \'{pswd}\';
-    ALTER USER {group} CREATEDB;
     """
 
 
@@ -28,15 +30,13 @@ def connect(ip):
 
 
 if __name__ == '__main__':
-    conns = [connect(ip) for ip in SERVERS.values()]
-    if None in conns:
-        exit(1)
-
     for group in CREDENTIALS.keys():
-        group_no = int(group.split("_")[-1])
-        conn = conns[group_no % 3]
-
+        conn = connect(group_IP(group))
         query = QUERY.format(group=group, pswd=CREDENTIALS[group])
         print(query)
+        conn.autocommit = True
+        conn.cursor().execute("DROP DATABASE IF EXISTS {group};".format(group=group))
+        conn.commit()
         conn.cursor().execute(query)
         conn.commit()
+        conn.close()
