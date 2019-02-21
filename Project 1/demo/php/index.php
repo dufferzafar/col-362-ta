@@ -65,7 +65,7 @@
     <p class="lead">Showing the results of: SELECT * FROM playstore ORDER BY random() LIMIT 25</p>
 
     <?php
-    pg_connect("host=10.17.50.247 dbname=zafar user=test_0 password=test");
+    pg_connect("host=10.17.50.247 dbname=group_0 user=group_0 password='This is a long passphrase that no one can guess.'");
     $query = "SELECT * FROM playstore ORDER BY random() LIMIT 25";
     $rows = pg_query($query);
     ?>

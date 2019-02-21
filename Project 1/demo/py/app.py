@@ -8,7 +8,7 @@ import psycopg2
 from flask import Flask, render_template, redirect
 
 # Connect to the database
-db = "host=10.17.50.247 dbname=zafar user=test_0 password=test"
+db = 'host=10.17.50.247 dbname=zafar user=group_0 password="This is a long passphrase that no one can guess."'
 conn = psycopg2.connect(db)
 cur = conn.cursor()
 
