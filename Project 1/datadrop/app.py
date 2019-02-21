@@ -124,9 +124,7 @@ def cleanup(conn, group):
 
 
 def pg_load(user, pswd, dump_path):
-    group_no = int(user.split("_")[-1]) % 3 + 1
-    key = "vpl" + str(group_no)
-    ip = SERVERS[key]
+    ip = group_IP(user)
 
     log.debug("%s - Performing Cleanup before loading", user)
     conn = connect(ip, user, pswd)
@@ -134,8 +132,8 @@ def pg_load(user, pswd, dump_path):
     cleanup(conn, user)
     conn.close()
 
-    log.debug("%s - Loading database", user)
     cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
+    log.debug("%s - Running command: %s ", user, cmd)
     msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
 
     return msg
