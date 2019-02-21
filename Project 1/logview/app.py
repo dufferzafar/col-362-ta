@@ -19,7 +19,9 @@ from flask import Flask, render_template, redirect
 
 import sys
 sys.path.append("..")
+
 from config import SERVERS
+from utils import my_IP, group_IP
 
 app = Flask(__name__)
 
@@ -41,23 +43,6 @@ PG_LOG_COLUMNS = [
 MAX_ROWS = 25
 
 
-def get_IP():
-    """
-    Returns primary IP address
-
-    https://stackoverflow.com/a/28950776
-    """
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(('10.255.255.255', 1))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
-
-
 @app.route("/")
 def root():
     return r"Use the /group/{group_number} URL."
@@ -69,10 +54,8 @@ def index(group_num):
     # Each group is assigned to a specific server
     # So that the load is equally balanced
     # and we only have to read log files present locally on disk
-    my_IP = get_IP()
-    group_IP = list(SERVERS.values())[int(group_num) % 3]
-    if my_IP != group_IP:
-        return redirect("http://%s:%d" % (group_IP, 5000))
+    if my_IP() != group_IP(group_num):
+        return redirect("http://%s:%d" % (group_IP(group_num), 5000))
 
     rows = deque()
 
