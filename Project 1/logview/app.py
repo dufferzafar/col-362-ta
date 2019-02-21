@@ -57,7 +57,7 @@ def index(group_num):
     # So that the load is equally balanced
     # and we only have to read log files present locally on disk
     if my_IP() != group_IP(group_num):
-        return redirect("http://%s:%d" % (group_IP(group_num), 5000))
+        return redirect("http://%s:%d/group/%d" % (group_IP(group_num), 5001, group_num))
 
     rows = deque()
 
