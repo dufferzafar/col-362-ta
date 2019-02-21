@@ -6,7 +6,6 @@ import logging
 import subprocess
 
 from flask import Flask, render_template, request, make_response
-from flask.logging import default_handler
 from flask_basicauth import BasicAuth
 
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -15,15 +14,12 @@ from werkzeug.utils import secure_filename
 sys.path.append("..")
 from config import CREDENTIALS, SERVERS
 
-# Setup Logging
+# Setup custom logging
 log = logging.getLogger('datadrop')
 log.setLevel(logging.DEBUG)
 fh = logging.FileHandler("Datadrop.log", mode="w")
 fh.setFormatter(logging.Formatter("%(asctime)s : %(levelname)s : %(funcName)10s() : %(message)s"))
 log.addHandler(fh)
-
-flask_log = logging.getLogger("flask")
-flask_log.addHandler(default_handler)
 
 app = Flask(__name__)
 basic_auth = BasicAuth(app)
