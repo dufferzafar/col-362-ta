@@ -48,10 +48,9 @@
     <!-- Begin page content -->
     <main role="main" class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5 ">Project 1 - Data Dump Upload</h1>
+            <h1 class="mt-5">Project 1 - Data Dump Upload</h1>
 
-            <!-- <p class="lead"> Big text. </p> -->
-            <!-- <p> Add some text here too? </p> -->
+            <h4 style="margin-top: 15px;">Logged in as: Group {{group}}</h4>
 
             <!-- The DropZone Form -->
             <form method="POST" action="/" class="dropzone dz-clickable" id="dropper"
@@ -63,12 +62,12 @@
             </form>
 
             <div class="alert alert-danger" id="error" style="display: none;">
-                <strong>Error Occurred:</strong>
-                <p id="errmsg"></p>
+                <strong>Error Occurred: Reload the page, and try uploading again!</strong>
+                <p id="errmsg" style="margin-top: 15px;"></p>
             </div>
 
             <div class="alert alert-success" id="success" style="display: none;">
-                <strong>Upload Successful!</strong>
+                <strong>Database has been uploaded successfuly!</strong>
             </div>
 
         </div>

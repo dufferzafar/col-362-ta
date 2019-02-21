@@ -47,7 +47,7 @@ def index():
         return redirect("http://%s:%d" % (group_IP(user), 5000))
 
     if request.method == 'GET':
-        return render_template('base.html')
+        return render_template('base.html', group=user.split("_")[-1])
 
     file = request.files['file']
 
