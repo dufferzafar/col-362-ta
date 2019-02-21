@@ -18,15 +18,22 @@ SMTP_SERVER = ""
 RECIPIENTS_FILE = "massmailer/recipients.csv"
 
 EMAIL_TEMPLATE = """
-Dear student,
+Hi,
 
-Use the following username and password to upload your database.
+Your group is: {uname}
+
+Members are: {members}
+
+Use the following username and password to upload your database to the portal.
 
 Uername: {uname}
 Password: {pswd}
 
+Portal's URL: {url}
+(will only work when connected to IIT Delhi's network)
+
 Regards,
-Shadab and Harish
+Shadab & Harish
 """
 
 ###########################################################################
