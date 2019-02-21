@@ -26,9 +26,11 @@ from utils import my_IP, group_IP
 app = Flask(__name__)
 
 # TODO: Add logic to find out which log file to user
-# PG_DIR = "/var/lib/postgresql/11/main/log/"
-# PG_LOG = PG_DIR + "postgresql-2019-01-28_184545.csv"
-PG_LOG = "/home/dufferzafar/dev/ta-iitd/spring-2019 - COL 362 - 632/Project 1/logview/postgresql-2019-01-28_184545.csv"
+PG_DIR = "/var/lib/postgresql/11/main/log/"
+PG_LOGs = [f for f in sorted(os.listdir(PG_DIR)) if f.endswith("csv")]
+
+# Pick only the last file
+PG_LOG = os.path.join(PG_DIR, PG_LOGs[-1])
 
 # Postgres' csvlog format
 # https://github.com/JorgeReus/pg_log_processor/blob/master/pg_log_processor.py#L65
@@ -62,7 +64,6 @@ def index(group_num):
     with open(PG_LOG, newline='') as f:
         for row in csv.reader(f):
 
-            # TODO: Filter by current group number
             # if not row[1].startswith("group_%d" % group_num):
             #     continue
 
@@ -75,4 +76,4 @@ def index(group_num):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
