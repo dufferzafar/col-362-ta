@@ -5,7 +5,7 @@ import shutil
 import logging
 import subprocess
 
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from flask_basicauth import BasicAuth
 
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -13,6 +13,7 @@ from werkzeug.utils import secure_filename
 
 sys.path.append("..")
 from config import CREDENTIALS, SERVERS
+from utils import my_IP, group_IP
 
 # Setup custom logging
 log = logging.getLogger('datadrop')
@@ -37,11 +38,18 @@ basic_auth.check_credentials = check_creds
 @app.route('/', methods=['GET', 'POST'])
 @basic_auth.required
 def index():
+    user = request.authorization.username
+
+    # Each group is assigned to a specific server
+    # So that the load is equally balanced
+    # and we only have to read log files present locally on disk
+    if my_IP() != group_IP(user):
+        return redirect("http://%s:%d" % (group_IP(user), 5000))
+
     if request.method == 'GET':
         return render_template('base.html')
 
     file = request.files['file']
-    user = request.authorization.username
 
     # Keep in mind that this function is called multiple times for the same file!
     current_chunk = int(request.form['dzchunkindex'])
