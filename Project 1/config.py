@@ -15,14 +15,12 @@ SENDER = {
 
 SMTP_SERVER = ""
 
-RECIPIENTS_FILE = "massmailer/recipients.csv"
+RECIPIENTS_FILE = "recipients.csv"
 
 EMAIL_TEMPLATE = """
 Hi,
 
-Your group is: {uname}
-
-Members are: {members}
+Your group members are: {members}
 
 Use the following username and password to upload your database to the portal.
 
