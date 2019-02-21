@@ -127,14 +127,27 @@ def pg_load(user, pswd, dump_path):
     ip = group_IP(user)
 
     log.debug("%s - Performing Cleanup before loading", user)
-    conn = connect(ip, user, pswd)
+    conn = connect(ip, "postgres", "vpl-362")
     # BUG: What if this fails
     cleanup(conn, user)
     conn.close()
 
-    cmd = 'PGPASSWORD="{pswd}" psql -h {ip} -d {db} -U {user} < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
-    log.debug("%s - Running command: %s ", user, cmd)
+    # Load Database
+    cmd = 'PGPASSWORD="vpl-362" psql -h {ip} -d {db} -U "postgres" < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
     msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+
+    # REVOKE PRIVILEDGES
+    conn = connect(ip, "postgres", "vpl-362", dbname=user)
+    query = """
+    REVOKE CREATE ON SCHEMA public FROM public;
+    GRANT ALL ON schema public TO postgres;
+    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {user};
+    GRANT SELECT ON ALL TABLES IN SCHEMA public TO {user};
+    """
+    conn.cursor().execute(query.format(user=user))
+    conn.commit()
+    conn.close()
+    log.debug("%s - Running command: %s ", user, cmd)
 
     return msg
 
