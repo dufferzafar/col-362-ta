@@ -5,6 +5,8 @@ import sys
 import sys
 sys.path.append("..")
 from config import *
+from email.mime.text import MIMEText
+
 
 SUBJECT = "DBMS Project 1 Credentials"
 
@@ -14,7 +16,6 @@ def setup_connection(sender):
     Establish a connection with the smtp server
     """
     smtp = smtplib.SMTP(SMTP_SERVER)
-    # smtp.set_debuglevel(True)
     user = sender["uname"]
     password = sender["pswd"]
     smtp.starttls()
@@ -28,8 +29,6 @@ def entry_to_kerberos(e):
 
 
 if __name__ == "__main__":
-    IITD = "@iitd.ac.in"
-    PORTAL_URL = "nothing"
     conn = setup_connection(SENDER)
 
     with open(RECIPIENTS_FILE) as recepients_file:
@@ -42,11 +41,13 @@ if __name__ == "__main__":
 
             if group not in CREDENTIALS:
                 print("Credentials for {group} does not exist.".format(group=group))
-            else:
-                tolist = [entry_to_kerberos(en) + IITD for en in entry_numbers]
-                print("Sending Credentials to {}".format(", ".join(tolist)))
+                tolist = [entry_to_kerberos(en) + MAIL_SERVER for en in entry_numbers]
 
-                msg = EMAIL_TEMPLATE.format(uname=group, pswd=CREDENTIALS[group], members=", ".join(names), url=PORTAL_URL)
-                msg = "Subject: {}\n\n{}".format(SUBJECT, msg)
+                body = EMAIL_TEMPLATE.format(uname=group, pswd=CREDENTIALS[group], members=", ".join(names), url=PORTAL_URL)
+                msg = MIMEText(body)
+                msg['Subject'] = SUBJECT
+                msg['From'] = SENDER['email']
+                msg['To'] = ", ".join(tolist)
 
-                conn.sendmail(SENDER["email"], tolist, msg)
+                print("Sending Credentials to {}".format(msg['To']))
+                conn.sendmail(SENDER['email'], tolist, msg.as_string())
