@@ -85,7 +85,7 @@ def index():
     total_chunks = int(request.form['dztotalchunkcount'])
     if current_chunk + 1 == total_chunks:
         msg = pg_load(user, request.authorization.password, file_path)
-        
+
         # Crude way of detecting that an error has occurred
         if b"ERROR:" in msg:
             log.error("%s - PG SQL returned: %s", user, msg.decode("ascii", "ignore"))
@@ -115,11 +115,14 @@ def connect(ip, user, pswd, dbname="postgres"):
 
 
 def cleanup(conn, group):
-    q1 = "DROP DATABASE IF EXISTS {group};"
-    q2 = "CREATE DATABASE {group};"
+    q1 = "DROP DATABASE IF EXISTS {group};".format(group=group)
+    q2 = "CREATE DATABASE {group};".format(group=group)
     conn.autocommit = True
-    conn.cursor().execute(q1.format(group=group))
-    conn.cursor().execute(q2.format(group=group))
+    cur = conn.cursor()
+    cur.execute(q1)
+    log.debug("%s: query - %s, status - %s", group, q1, cur.statusmessage)
+    cur.execute(q2)
+    log.debug("%s: query - %s, status - %s", group, q2, cur.statusmessage)
     conn.commit()
 
 
@@ -131,13 +134,17 @@ def pg_load(user, pswd, dump_path):
     # BUG: What if this fails
     cleanup(conn, user)
     conn.close()
+    log.debug("%s - Cleanup Complete", user)
 
     # Load Database
     cmd = 'PGPASSWORD="vpl-362" psql -h {ip} -d {db} -U "postgres" < "{dump}"'.format(pswd=pswd, ip=ip, db=user, user=user, dump=dump_path)
+    log.debug("%s - Running command: %s ", user, cmd)
     msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
-
+    log.debug("%s - Database Loading Complete", user)
+    
     # REVOKE PRIVILEDGES
     conn = connect(ip, "postgres", "vpl-362", dbname=user)
+    log.debug("%s - Revoking Priviledges", user)
     query = """
     REVOKE CREATE ON SCHEMA public FROM public;
     GRANT ALL ON schema public TO postgres;
@@ -147,7 +154,6 @@ def pg_load(user, pswd, dump_path):
     conn.cursor().execute(query.format(user=user))
     conn.commit()
     conn.close()
-    log.debug("%s - Running command: %s ", user, cmd)
 
     return msg
 
