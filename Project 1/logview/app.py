@@ -44,6 +44,9 @@ PG_LOG_COLUMNS = [
 
 MAX_ROWS = 25
 
+# Some fields are very large
+csv.field_size_limit(sys.maxsize)
+
 
 @app.route("/")
 def root():
