@@ -29,7 +29,7 @@ push-src:
 	@cut -f1 ./hosts | xargs -I{} rsync -arv --exclude={__pycache__,*.sql,uploads,*.log} . {}:~/proj1/
 
 list-uploads:
-	@./run-all find proj1/uploads -type f 
+	@./run-all 'find proj1/uploads -type f -exec du -sh {} +' 
 
 list-dbs:
 	@./run-all "PGPASSWORD='vpl-362' psql -U postgres -c \"SELECT datname FROM pg_database where datname like 'group%';\" "
