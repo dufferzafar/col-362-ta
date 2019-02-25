@@ -64,8 +64,8 @@ def index(group_num):
     with open(PG_LOG, newline='') as f:
         for row in csv.reader(f):
 
-            # if not row[1].startswith("group_%d" % group_num):
-            #     continue
+            if not row[1].startswith("group_%d" % group_num):
+                continue
 
             rows.append([row[0], row[13]])
 
