@@ -18,7 +18,7 @@ from utils import my_IP, group_IP
 # Setup custom logging
 log = logging.getLogger('datadrop')
 log.setLevel(logging.DEBUG)
-fh = logging.FileHandler("Datadrop.log", mode="w")
+fh = logging.FileHandler("Datadrop.log", mode="a")
 fh.setFormatter(logging.Formatter("%(asctime)s : %(levelname)s : %(funcName)10s() : %(message)s"))
 log.addHandler(fh)
 
