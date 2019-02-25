@@ -4,7 +4,7 @@ backlog = 2048
 workers = 17
 worker_class = 'sync'
 worker_connections = 1000
-timeout = 100
+timeout = 1800
 keepalive = 2
 
 reload = True
