@@ -1,0 +1,46 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS: Bootstrap -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+
+    <title>COL 362/632 - Project 1 - Postgres Log Viewer</title>
+
+    <style>
+        .container {
+            width: auto;
+            padding: 0 15px;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <!-- Begin page content -->
+    <main role="main">
+        <div class="container">
+            
+            <table class="mt-5 table table-bordered" style="margin-top: 50px;">
+                <tbody>
+                    {% for g in range(33) %}
+                    <tr>
+                        <td scope="row">Group {{g}}</td>
+                        <td scope="row"><a href="/group/{{g}}">SQL Queries being run</a></td>
+                        <td scope="row"><a href="/schema/{{g}}">Database Schema</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        </main>
+    </body>
+
+</html>

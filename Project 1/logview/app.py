@@ -49,12 +49,12 @@ csv.field_size_limit(sys.maxsize)
 
 
 @app.route("/")
-def root():
-    return r"Use the /group/{group_number} URL."
+def index():
+    return render_template("index.html")
 
 
 @app.route("/group/<int:group_num>")
-def index(group_num):
+def group(group_num):
 
     # Each group is assigned to a specific server
     # So that the load is equally balanced
@@ -75,7 +75,12 @@ def index(group_num):
             if len(rows) > MAX_ROWS:
                 rows.popleft()
 
-    return render_template("base.html", rows=reversed(rows), group_num=group_num)
+    return render_template("group.html", rows=reversed(rows), group_num=group_num)
+
+
+@app.route("/schema/<int:group_num>")
+def schema(group_num):
+    return render_template("schema.html")
 
 
 if __name__ == "__main__":
