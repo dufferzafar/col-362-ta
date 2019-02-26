@@ -79,9 +79,9 @@ def group(group_num):
     return render_template("group.html", rows=reversed(rows), group_num=group_num)
 
 
-def run_query(ip, db, query, show_columns=True):
-    column = "-t" if not show_columns else ""
-    cmd = 'PGPASSWORD="vpl-362" psql {column} -h {ip} -d {db} -U "postgres" -c "{query}"'.format(ip=ip, db=db, query=query, column=column)
+def run_query(ip, db, query, show_html=False):
+    html = "--html" if show_html else ""
+    cmd = 'PGPASSWORD="vpl-362" psql {html} -h {ip} -d {db} -U "postgres" -c "{query}"'.format(ip=ip, db=db, query=query, html=html)
     try:
         msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
         status = 0
@@ -111,11 +111,11 @@ def schema(group_num):
             continue
 
         table = row.split("|")[1].strip()
-        table_schema = run_query(ip, db, "\\d %s" % (table))
+        _, table_schema = run_query(ip, db, "\\d %s" % (table), show_html=True)
         schemas.append(table_schema)
 
     # Skip First row
-    tables = "\n".join(tables.split("\n")[1:])
+    _, tables = run_query(ip, db, "\\dt", show_html=True)
     return render_template("schema.html", tables=tables, schemas=schemas, group_num=group_num)
 
 
