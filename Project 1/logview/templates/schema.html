@@ -18,6 +18,17 @@
             width: auto;
             padding: 0 15px;
         }
+        caption {
+            caption-side: top;
+            color: black;
+            font-size: 25pt;
+            font-weight: 300;
+            font-style: italic;
+            text-align: center;
+        }
+        p {
+            font-size: 15pt;
+        }
     </style>
 </head>
 
@@ -30,22 +41,36 @@
             <h1 class="mt-5 ">Database Schema: Group {{ group_num }}</h1>
             <!-- <p class="lead">Showing all tables and their info</p> -->
 
-            <br> <hr> <br>
-
-            <h2 style="text-align: center; margin-bottom: 50px;">List of relations</h3>
-            <pre><code style="font-size: 13pt;">{{tables}}</code></pre>
-
-            <br> <hr> <br>
-
-            <h2 style="text-align: center; margin-bottom: 50px;">Details of relations</h3>
+            <hr>
             
+            {{tables | safe}}
+
             {% for schema in schemas %}
-                <pre><code style="font-size: 13pt;">{{schema}}</code></pre>
                 <hr>
+                {{schema | safe}}
+                <br>
             {% endfor %}
 
         </div>
-        </main>
-    </body>
+    </main>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script>
+        $(document).ready(function () {
+            $("table").each(function (idx) { 
+                // Use bootstrap classes
+                $(this).addClass('table table-bordered');
+                
+                // Bold table/columns names for each table
+                let child = (idx == 0) ? 1 : 0;
+                $(this).find("tr").each(function () { 
+                    $(this).find(`td:eq(${child})`).css("font-weight", "bold")  
+                });
+            });
+        });
+    </script>
+
+</body>
+
 
 </html>
