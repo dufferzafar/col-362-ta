@@ -12,6 +12,7 @@ import os
 import sys
 import csv
 import socket
+import subprocess
 
 from collections import deque
 
@@ -78,9 +79,34 @@ def group(group_num):
     return render_template("group.html", rows=reversed(rows), group_num=group_num)
 
 
+def run_query(ip, db, query, show_columns=True):
+    column = "-t" if not show_columns else ""
+    cmd = 'PGPASSWORD="vpl-362" psql {column} -h {ip} -d {db} -U "postgres" -c "{query}"'.format(ip=ip, db=db, query=query, column=column)
+    msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+    return msg.decode("utf-8")
+
+
 @app.route("/schema/<int:group_num>")
 def schema(group_num):
-    return render_template("schema.html")
+    # if my_IP() != group_IP(group_num):
+    #     return redirect("http://%s:%d/schema/%d" % (group_IP(group_num), 5001, group_num))
+
+    ip = group_IP(group_num)
+    db = "group_" + str(group_num)
+
+    tables = run_query(ip, db, "\\dt")
+    # print(tables)
+
+    schemas = []
+    for row in tables.split("\n")[3:]:
+        if "|" not in row:
+            continue
+
+        table = row.split("|")[1].strip()
+        table_schema = run_query(ip, db, "\\d %s" % (table))
+        schemas.append(table_schema)
+
+    return render_template("schema.html", tables=tables, schemas=schemas)
 
 
 if __name__ == "__main__":
