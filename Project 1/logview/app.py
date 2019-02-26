@@ -114,7 +114,9 @@ def schema(group_num):
         table_schema = run_query(ip, db, "\\d %s" % (table))
         schemas.append(table_schema)
 
-    return render_template("schema.html", tables=tables, schemas=schemas)
+    # Skip First row
+    tables = "\n".join(tables.split("\n")[1:])
+    return render_template("schema.html", tables=tables, schemas=schemas, group_num=group_num)
 
 
 if __name__ == "__main__":

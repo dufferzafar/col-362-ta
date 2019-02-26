@@ -1,0 +1,51 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- CSS: Bootstrap -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" />
+
+    <title>COL 362/632 - Project 1 - Postgres Log Viewer</title>
+
+    <style>
+        .container {
+            width: auto;
+            padding: 0 15px;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column h-100">
+
+    <!-- Begin page content -->
+    <main role="main">
+        <div class="container">
+
+            <h1 class="mt-5 ">Database Schema: Group {{ group_num }}</h1>
+            <!-- <p class="lead">Showing all tables and their info</p> -->
+
+            <br> <hr> <br>
+
+            <h2 style="text-align: center; margin-bottom: 50px;">List of relations</h3>
+            <pre><code style="font-size: 13pt;">{{tables}}</code></pre>
+
+            <br> <hr> <br>
+
+            <h2 style="text-align: center; margin-bottom: 50px;">Details of relations</h3>
+            
+            {% for schema in schemas %}
+                <pre><code style="font-size: 13pt;">{{schema}}</code></pre>
+                <hr>
+            {% endfor %}
+
+        </div>
+        </main>
+    </body>
+
+</html>
