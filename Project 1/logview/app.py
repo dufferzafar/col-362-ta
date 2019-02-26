@@ -82,20 +82,28 @@ def group(group_num):
 def run_query(ip, db, query, show_columns=True):
     column = "-t" if not show_columns else ""
     cmd = 'PGPASSWORD="vpl-362" psql {column} -h {ip} -d {db} -U "postgres" -c "{query}"'.format(ip=ip, db=db, query=query, column=column)
-    msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
-    return msg.decode("utf-8")
+    try:
+        msg = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+        status = 0
+    except subprocess.CalledProcessError as err:
+        msg = err.output
+        status = err.returncode
+    return status, msg.decode("utf-8")
 
 
 @app.route("/schema/<int:group_num>")
 def schema(group_num):
-    # if my_IP() != group_IP(group_num):
-    #     return redirect("http://%s:%d/schema/%d" % (group_IP(group_num), 5001, group_num))
+    if my_IP() != group_IP(group_num):
+        return redirect("http://%s:%d/schema/%d" % (group_IP(group_num), 5001, group_num))
 
     ip = group_IP(group_num)
     db = "group_" + str(group_num)
 
-    tables = run_query(ip, db, "\\dt")
-    # print(tables)
+    status, tables = run_query(ip, db, "\\dt")
+
+    # if status is non zero
+    if status:
+        return "Database for group %s does not exist" % group_num
 
     schemas = []
     for row in tables.split("\n")[3:]:
