@@ -14,7 +14,7 @@ def run_query(ip, db, query, show_html=False):
     return status, msg
 
 
-def change_ownership(group):
+def change_ownership_db_components(group):
     print("\nChanging Ownerships...")
     ip = group_IP(group)
 
@@ -55,6 +55,7 @@ def give_permissions(group):
         "GRANT ALL ON ALL TABLES IN schema public TO {group};",
         "GRANT ALL ON ALL SEQUENCES IN schema public TO {group};",
         "GRANT ALL ON ALL FUNCTIONS IN schema public TO {group};",
+        "ALTER SCHEMA public OWNER TO {group};",
         "ALTER DATABASE {group} OWNER TO {group};"
     ]
 
@@ -66,8 +67,8 @@ def give_permissions(group):
 
 
 if __name__ == '__main__':
-    for i in range(35):
+    for i in range(1):
         group = "group_%s" % (i)
         print("User: ", group)
         give_permissions(group)
-        change_ownership(group)
+        change_ownership_db_components(group)
