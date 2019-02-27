@@ -105,11 +105,7 @@ def schema(group_num):
     if status:
         return "Database for group %s does not exist" % group_num
 
-    Q = """
-    SELECT C.relname AS "Table Name", C.reltuples AS "Number of Rows"
-    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
-    WHERE N.nspname NOT IN ('pg_catalog', 'information_schema') AND C.relkind='r';
-    """
+    Q = "SELECT C.relname AS table, C.reltuples AS approx_count FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace) WHERE N.nspname NOT IN ('pg_catalog', 'information_schema') AND C.relkind='r' ORDER BY C.relname;"""
     _, counts = run_query(ip, db, Q, show_html=True)
 
     schemas = []
