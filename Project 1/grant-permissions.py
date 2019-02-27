@@ -54,6 +54,18 @@ def change_ownership_db_components(group):
             status, output = run_query(ip, group, query)
             print("\tQuery:{}\n\tStatus:{}\n\tOutput:{}\n\n".format(query, status, output))
 
+    print("\nMaterialized Views...")
+    q_mviews = "SELECT oid::regclass::text FROM  pg_class WHERE  relkind = 'm';"
+    status, mviews = run_query(ip, group, q_mviews)
+
+    # If exist status of previous command is zero
+    if not status:
+        mviews = [each.strip() for each in mviews.split()]
+        for each in mviews:
+            query = "ALTER MATERIALIZED VIEW \"{}\" OWNER TO {};".format(each, group)
+            status, output = run_query(ip, group, query)
+            print("\tQuery:{}\n\tStatus:{}\n\tOutput:{}\n\n".format(query, status, output))
+
 
 def give_permissions(group):
     print("\nGiving Permissions...")
