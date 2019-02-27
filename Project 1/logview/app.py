@@ -105,6 +105,13 @@ def schema(group_num):
     if status:
         return "Database for group %s does not exist" % group_num
 
+    Q = """
+    SELECT C.relname AS "Table Name", C.reltuples AS "Number of Rows"
+    FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+    WHERE N.nspname NOT IN ('pg_catalog', 'information_schema') AND C.relkind='r';
+    """
+    _, counts = run_query(ip, db, Q, show_html=True)
+
     schemas = []
     for row in tables.split("\n")[3:]:
         if "|" not in row:
@@ -116,7 +123,7 @@ def schema(group_num):
 
     # Skip First row
     _, tables = run_query(ip, db, "\\dt", show_html=True)
-    return render_template("schema.html", tables=tables, schemas=schemas, group_num=group_num)
+    return render_template("schema.html", tables=tables, counts=counts, schemas=schemas, group_num=group_num)
 
 
 if __name__ == "__main__":
