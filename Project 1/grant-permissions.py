@@ -19,32 +19,38 @@ def change_ownership_db_components(group):
     ip = group_IP(group)
 
     print("\nTables...")
-    q_tables = "select tablename from pg_tables where schemaname = 'public';"
+    q_tables = "SELECT TABLENAME FROM PG_TABLES WHERE SCHEMANAME = 'public';"
     status, tables = run_query(ip, group, q_tables)
+
+    # If exist status of previous command is zero
     if not status:
         tables = [each.strip() for each in tables.split()]
         for each in tables:
-            query = "alter table \"{}\" owner to {};".format(each, group)
+            query = "ALTER TABLE \"{}\" OWNER TO {};".format(each, group)
             status, output = run_query(ip, group, query)
             print("\tQuery:{}\n\tStatus:{}\n\tOutput:{}\n\n".format(query, status, output))
 
     print("\nSequences...")
-    q_seq = "select sequence_name from information_schema.sequences where sequence_schema = 'public';"
+    q_seq = "SELECT SEQUENCE_NAME FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_SCHEMA = 'public';"
     status, sequences = run_query(ip, group, q_seq)
+
+    # If exist status of previous command is zero
     if not status:
         sequences = [each.strip() for each in sequences.split()]
         for each in sequences:
-            query = "alter sequence \"{}\" owner to {};".format(each, group)
+            query = "ALTER SEQUENCE \"{}\" OWNER TO {};".format(each, group)
             status, output = run_query(ip, group, query)
             print("\tQuery:{}\n\tStatus:{}\n\tOutput:{}\n\n".format(query, status, output))
 
     print("\nViews...")
-    q_views = "select table_name from information_schema.views where table_schema = 'public';"
+    q_views = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = 'public';"
     status, views = run_query(ip, group, q_views)
+
+    # If exist status of previous command is zero
     if not status:
         views = [each.strip() for each in views.split()]
         for each in views:
-            query = "alter view \"{}\" owner to {};".format(each, group)
+            query = "ALTER VIEW \"{}\" OWNER TO {};".format(each, group)
             status, output = run_query(ip, group, query)
             print("\tQuery:{}\n\tStatus:{}\n\tOutput:{}\n\n".format(query, status, output))
 
@@ -67,7 +73,7 @@ def give_permissions(group):
 
 
 if __name__ == '__main__':
-    for i in range(1):
+    for i in range(35):
         group = "group_%s" % (i)
         print("User: ", group)
         give_permissions(group)
