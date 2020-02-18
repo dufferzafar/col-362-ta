@@ -1,5 +1,5 @@
 
-# COL 362 / 632 TA Work
+# TA Work - COL 362 / 632 - Early 2019
 
 | Work         | Owner                  | Description |
 |:-------------|:-----------------------|:------------|
